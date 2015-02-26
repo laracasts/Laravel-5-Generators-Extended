@@ -85,11 +85,11 @@ class CreateUsersTable extends Migration {
 	public function up()
 	{
 		Schema::create('users', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->timestamps();
-        });
+			$table->increments('id');
+			$table->string('username');
+			$table->string('email')->unique();
+			$table->timestamps();
+		});
 	}
 
 	/**
@@ -132,8 +132,8 @@ class RemoveUserIdFromPostsTable extends Migration {
 	public function up()
 	{
 		Schema::table('posts', function(Blueprint $table) {
-            $table->dropColumn('user_id');
-        });
+			$table->dropColumn('user_id');
+		});
 	}
 
 	/**
@@ -144,8 +144,8 @@ class RemoveUserIdFromPostsTable extends Migration {
 	public function down()
 	{
 		Schema::table('posts', function(Blueprint $table) {
-            $table->integer('user_id');
-        });
+			$table->integer('user_id');
+		});
 	}
 
 }
@@ -154,7 +154,7 @@ class RemoveUserIdFromPostsTable extends Migration {
 Here's a few other examples of commands that you might write:
 
 - `php artisan make:migration:schema create_posts_table`
-- `php artisan make:migration:schema create_posts_table --schema="title:string, body:text, excerpt:string:nullable`
+- `php artisan make:migration:schema create_posts_table --schema="title:string, body:text, excerpt:string:nullable"`
 - `php artisan make:migration:schema remove_excerpt_from_posts_table --schema="excerpt:string:nullable"`
 
 
@@ -234,10 +234,10 @@ use Laracasts\TestDummy\Factory as TestDummy;
 
 class PostsTableSeeder extends Seeder {
 
-    public function run()
-    {
+	public function run()
+	{
         // TestDummy::times(20)->create('App\Post');
-    }
+	}
 
 }
 ```
