@@ -179,7 +179,10 @@ class MigrationMakeCommand extends Command
      */
     protected function replaceSchema(&$stub)
     {
-        $schema = (new SchemaParser)->parse($this->option('schema'));
+        if ($schema = $this->option('schema')) {
+            $schema = (new SchemaParser)->parse($schema);
+        }
+
         $schema = (new SyntaxBuilder)->create($schema, $this->meta);
 
         $stub = str_replace(['{{schema_up}}', '{{schema_down}}'], $schema, $stub);

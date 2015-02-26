@@ -153,6 +153,8 @@ class SyntaxBuilder
      */
     private function constructSchema($schema, $direction = 'Add')
     {
+        if ( ! $schema) return '';
+
         $fields = array_map(function($field) use ($direction) {
             $method = "{$direction}Column";
 
