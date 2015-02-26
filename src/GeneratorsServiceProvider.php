@@ -44,11 +44,11 @@ class GeneratorsServiceProvider extends ServiceProvider {
 	 */
 	private function registerMigrationGenerator()
 	{
-		$this->app->singleton('command.laracasts.migration', function ($app) {
+		$this->app->singleton('command.laracasts.migrate', function ($app) {
 			return $app['Laracasts\Generators\Commands\MigrationMakeCommand'];
 		});
 
-		$this->commands('command.laracasts.migration');
+		$this->commands('command.laracasts.migrate');
 	}
 
 }

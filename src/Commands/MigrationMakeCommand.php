@@ -18,14 +18,14 @@ class MigrationMakeCommand extends Command
      *
      * @var string
      */
-    protected $name = 'make:migration';
+    protected $name = 'make:migration:schema';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new migration class';
+    protected $description = 'Create a new migration class, and apply schema at the same time';
 
     /**
      * The filesystem instance.
