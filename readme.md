@@ -175,7 +175,7 @@ So you need a migration to setup a pivot table in your database? Easy. We can sc
 php artisan make:migration:pivot tags posts
 ```
 
-Here we pass, in anymore, the names of the two tables that we need a joining/pivot table for. This will give you:
+Here we pass, in any order, the names of the two tables that we need a joining/pivot table for. This will give you:
 
 ```php
 <?php
