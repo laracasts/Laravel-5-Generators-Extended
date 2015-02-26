@@ -1,8 +1,8 @@
 <?php
 
-namespace Laracasts\Generators;
+namespace Laracasts\Generators\Migrations;
 
-class SchemaSyntaxCreator
+class SyntaxBuilder
 {
 
     /**
@@ -131,7 +131,7 @@ class SchemaSyntaxCreator
      */
     private function getCreateSchemaWrapper()
     {
-        return file_get_contents(__DIR__ . '/stubs/schema-create.stub');
+        return file_get_contents(__DIR__ . '/../stubs/schema-create.stub');
     }
 
     /**
@@ -141,7 +141,7 @@ class SchemaSyntaxCreator
      */
     private function getChangeSchemaWrapper()
     {
-        return file_get_contents(__DIR__ . '/stubs/schema-change.stub');
+        return file_get_contents(__DIR__ . '/../stubs/schema-change.stub');
     }
 
     /**

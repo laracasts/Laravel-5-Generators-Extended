@@ -4,9 +4,9 @@ namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Laracasts\Generators\MigrationNameParser;
-use Laracasts\Generators\MigrationSchemaParser;
-use Laracasts\Generators\SchemaSyntaxCreator;
+use Laracasts\Generators\Migrations\NameParser;
+use Laracasts\Generators\Migrations\SchemaParser;
+use Laracasts\Generators\Migrations\SyntaxBuilder;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -18,7 +18,7 @@ class MigrationMakeCommand extends Command
      *
      * @var string
      */
-    protected $name = 'make:migrations';
+    protected $name = 'make:migration';
 
     /**
      * The console command description.
@@ -49,10 +49,10 @@ class MigrationMakeCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param Filesystem          $files
-     * @param MigrationNameParser $parser
+     * @param Filesystem $files
+     * @param NameParser $parser
      */
-    public function __construct(Filesystem $files, MigrationNameParser $parser)
+    public function __construct(Filesystem $files, NameParser $parser)
     {
         parent::__construct();
 
@@ -162,8 +162,8 @@ class MigrationMakeCommand extends Command
      */
     public function replaceSchema(&$stub)
     {
-        $schema = (new MigrationSchemaParser)->parse($this->option('schema'));
-        $schema = (new SchemaSyntaxCreator)->create($schema, $this->meta);
+        $schema = (new SchemaParser)->parse($this->option('schema'));
+        $schema = (new SyntaxBuilder)->create($schema, $this->meta);
 
         $stub = str_replace(['{{schema_up}}', '{{schema_down}}'], $schema, $stub);
 

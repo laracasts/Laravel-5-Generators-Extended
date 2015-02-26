@@ -1,8 +1,8 @@
 <?php
 
-namespace Laracasts\Generators;
+namespace Laracasts\Generators\Migrations;
 
-class MigrationSchemaParser
+class SchemaParser
 {
 
     /**
