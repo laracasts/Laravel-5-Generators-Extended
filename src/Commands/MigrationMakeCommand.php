@@ -44,7 +44,7 @@ class MigrationMakeCommand extends Command
     /**
      * @var MigrationNameParser
      */
-    private $parser;
+    protected $parser;
 
     /**
      * Create a new command instance.
@@ -103,7 +103,7 @@ class MigrationMakeCommand extends Command
      * @param  string $name
      * @return string
      */
-    private function getPath($name)
+    protected function getPath($name)
     {
         return './database/migrations/'.date('Y_m_d_His').'_'.$name.'.php';
     }
@@ -113,7 +113,7 @@ class MigrationMakeCommand extends Command
      *
      * @return string
      */
-    private function compileMigrationStub()
+    protected function compileMigrationStub()
     {
         $stub = $this->files->get(__DIR__.'/../stubs/migration.stub');
 
@@ -130,7 +130,7 @@ class MigrationMakeCommand extends Command
      * @param  string $stub
      * @return $this
      */
-    private function replaceClassName(&$stub)
+    protected function replaceClassName(&$stub)
     {
         $className = ucwords(camel_case($this->argument('name')));
 
@@ -145,7 +145,7 @@ class MigrationMakeCommand extends Command
      * @param  string $stub
      * @return $this
      */
-    public function replaceTableName(&$stub)
+    protected function replaceTableName(&$stub)
     {
         $table = $this->meta['table'];
 
@@ -160,7 +160,7 @@ class MigrationMakeCommand extends Command
      * @param  string $stub
      * @return $this
      */
-    public function replaceSchema(&$stub)
+    protected function replaceSchema(&$stub)
     {
         $schema = (new SchemaParser)->parse($this->option('schema'));
         $schema = (new SyntaxBuilder)->create($schema, $this->meta);
