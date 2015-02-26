@@ -39,7 +39,7 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 ### Migrations With Schema
 
 ```
-php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique, age:integer:nullable, password:string"
+php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique, password:string"
 ```
 
 This will give you:
@@ -63,7 +63,6 @@ class CreateUsersTable extends Migration {
             $table->increments('id');
             $table->string('username');
             $table->string('email')->unique();
-            $table->integer('age')->nullable();
             $table->string('password');
             $table->timestamps();
         });
@@ -82,7 +81,7 @@ class CreateUsersTable extends Migration {
 }
 ```
 
-When generating migrations with schema, the name of your migration (like, "create_users_table") matters. We use it to figure out what you're trying to do. In this case, we began with the "create" keyword, which signals that we want to create a
+When generating migrations with schema, the name of your migration (like, "create_users_table") matters. We use it to figure out what you're trying to accomplish. In this case, we began with the "create" keyword, which signals that we want to create a
 new table.
 
 Alternatively, we can use the "remove" or "add" keywords, and the generated boilerplate will adapt, as needed. Let's create a migration to remove a column.
@@ -130,11 +129,13 @@ class RemoveUserIdFromPostsTable extends Migration {
 
 ### Pivot Tables
 
+So you need a migration to setup a pivot table in your database? Easy. We can scaffold the whole class with a single command.
+
 ```
 php artisan make:migration:pivot tags posts
 ```
 
-This will give you:
+Here we pass, in anymore, the names of the two tables that we need a joining/pivot table for. This will give you:
 
 ```
 <?php
