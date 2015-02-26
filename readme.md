@@ -1,86 +1,42 @@
-# Full Readme Coming Soon
+# Laravel 5 Extended generators
 
-If you're familiar with my Laravel 4 Generators, then this is basically the same thing - just upgraded for Laravel 5.
+If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5.
 
-L5 includes a bunch of generators out of the box, so this just adds a few things, like:
+L5 includes a bunch of generators out of the box, so this package only needs to add a few things, like:
 
 - `make:migration:schema`
 - `make:migration:pivot`
 - `make:seed`
 
+*With one or two more to come.*
 
 ## Usage
 
 ### Step 1: Install Through Composer
 
 ```
-composer require 'laracasts/generators'
+composer require 'laracasts/generators' --dev
 ```
 
 ### Step 2: Add the Service Provider
 
-Open `config/app.php` and, to your "providers" array, at the bottom, add:
+Open `config/app.php` and, to your "providers" array at the bottom, add:
 
 ```
-Laracasts\Generators\GeneratorsServiceProvider
+"Laracasts\Generators\GeneratorsServiceProvider"
 ```
 
 ### Step 3: Run Artisan!
 
 You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
 
-## Examples:
+## Examples
 
-I'll elaborate more in the future. For now:
+- [Migrations With Schema](#migrations-with-schema)
+- [Pivot Tables](#pivot-tables)
+- [Database Seeders](#database-seeders)
 
-### Generate a Pivot Table for Posts and Tags
-
-```
-php artisan make:migration:pivot tags posts
-```
-
-This will give you:
-
-```
-<?php
-
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class CreatePostTagPivotTable extends Migration {
-
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::create('post_tag', function(Blueprint $table)
-		{
-			$table->integer('post_id')->unsigned()->index();
-			$table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
-			$table->integer('tag_id')->unsigned()->index();
-			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
-		});
-	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('post_tag');
-	}
-
-}
-```
-
-> Notice that the naming conventions are being followed here, regardless of what order you pass the table names.
-
-### Generate a Migration Class With Schema
+### Migrations With Schema
 
 ```
 php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique, age:integer:nullable, password:string"
@@ -172,7 +128,54 @@ class RemoveUserIdFromPostsTable extends Migration {
 }
 ```
 
-### Generate a Database Seeder Class
+### Pivot Tables
+
+```
+php artisan make:migration:pivot tags posts
+```
+
+This will give you:
+
+```
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreatePostTagPivotTable extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('post_tag', function(Blueprint $table)
+		{
+			$table->integer('post_id')->unsigned()->index();
+			$table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+			$table->integer('tag_id')->unsigned()->index();
+			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('post_tag');
+	}
+
+}
+```
+
+> Notice that the naming conventions are being followed here, regardless of what order you pass the table names.
+
+### Database Seeders
 
 ```
 php artisan make:seed posts
