@@ -1,15 +1,15 @@
 <?php
 
-namespace spec\Laracasts\Generators;
+namespace spec\Laracasts\Generators\Migrations;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class MigrationSchemaParserSpec extends ObjectBehavior
+class SchemaParserSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('Laracasts\Generators\MigrationSchemaParser');
+        $this->shouldHaveType('Laracasts\Generators\Migrations\SchemaParser');
     }
 
     function it_parses_a_basic_string_schema()

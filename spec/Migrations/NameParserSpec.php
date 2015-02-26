@@ -1,15 +1,15 @@
 <?php
 
-namespace spec\Laracasts\Generators;
+namespace spec\Laracasts\Generators\Migrations;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class MigrationNameParserSpec extends ObjectBehavior
+class NameParserSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('Laracasts\Generators\MigrationNameParser');
+        $this->shouldHaveType('Laracasts\Generators\Migrations\NameParser');
     }
 
     function it_parses_a_migration_name_into_an_array()
