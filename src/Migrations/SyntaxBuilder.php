@@ -2,6 +2,8 @@
 
 namespace Laracasts\Generators\Migrations;
 
+use Laracasts\Generators\GeneratorException;
+
 class SyntaxBuilder
 {
 
@@ -15,8 +17,8 @@ class SyntaxBuilder
     /**
      * Create the PHP syntax for the given schema.
      *
-     * @param  array $schema
-     * @param        $meta
+     * @param  array  $schema
+     * @param  array  $meta
      * @return string
      */
     public function create($schema, $meta)
@@ -33,26 +35,20 @@ class SyntaxBuilder
      * @param  string $schema
      * @param  array  $meta
      * @return string
-     * @throws GeneratorsException
+     * @throws GeneratorException
      */
     private function createSchemaForUpMethod($schema, $meta)
     {
         $fields = $this->constructSchema($schema);
 
-        // If the user wants to create a table, then we should
-        // create the necessary schema for them.
         if ($meta['action'] == 'create') {
             return $this->insert($fields)->into($this->getCreateSchemaWrapper());
         }
 
-        // If the user wants to add a column to an existing table, then
-        // we should prepare the appropriate schema to append.
         if ($meta['action'] == 'add') {
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
 
-        // If the user wants to remove a column from a table, then
-        // we should prepare the appropriate schema.
         if ($meta['action'] == 'remove') {
             $fields = $this->constructSchema($schema, 'Drop');
 
@@ -60,7 +56,7 @@ class SyntaxBuilder
         }
 
         // Otherwise, we have no idea how to proceed.
-        throw new GeneratorsException('Could not determine what you are trying to do. Sorry! Check your migration name.');
+        throw new GeneratorException;
     }
 
     /**
@@ -69,17 +65,17 @@ class SyntaxBuilder
      * @param  array $schema
      * @param  array $meta
      * @return string
-     * @throws GeneratorsException
+     * @throws GeneratorException
      */
     private function createSchemaForDownMethod($schema, $meta)
     {
         // If the user created a table, then for the down
-        // method, we should remove it.
+        // method, we should drop it.
         if ($meta['action'] == 'create') {
             return sprintf("Schema::drop('%s');", $meta['table']);
         }
 
-        // If the user appended columns to a table, then for
+        // If the user added columns to a table, then for
         // the down method, we should remove them.
         if ($meta['action'] == 'add') {
             $fields = $this->constructSchema($schema, 'Drop');
@@ -87,7 +83,7 @@ class SyntaxBuilder
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
 
-        // If the user remove columns from a table, then for
+        // If the user removed columns from a table, then for
         // the down method, we should add them back on.
         if ($meta['action'] == 'remove') {
             $fields = $this->constructSchema($schema);
@@ -96,7 +92,7 @@ class SyntaxBuilder
         }
 
         // Otherwise, we have no idea how to proceed.
-        throw new GeneratorsException('Could not determine what you are trying to do. Sorry! Check your migration name.');
+        throw new GeneratorException;
     }
 
     /**

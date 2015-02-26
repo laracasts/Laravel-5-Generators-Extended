@@ -19,11 +19,23 @@ class SyntaxBuilderSpec extends ObjectBehavior
             "type"    => "string",
             "options" => [
                 "unique"   => true,
-                "nullable" => true
+                "nullable" => true,
+                "default" => '"foo@example.com"'
             ]
         ]];
 
-        $this->create($schema, ['table' => 'posts', 'action' => 'create'])->shouldBeArray();
+        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['up']->shouldBe(getStub());
+        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::drop('posts');");
     }
 
+}
+
+function getStub() {
+    return <<<EOT
+Schema::create('{{table}}', function(Blueprint \$table) {
+            \$table->increments('id');
+            \$table->string('email')->unique()->nullable()->default("foo@example.com");
+            \$table->timestamps();
+        });
+EOT;
 }
