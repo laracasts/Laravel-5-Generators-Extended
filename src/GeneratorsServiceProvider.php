@@ -25,6 +25,7 @@ class GeneratorsServiceProvider extends ServiceProvider {
 	{
 		$this->registerSeedGenerator();
 		$this->registerMigrationGenerator();
+		$this->registerPivotMigrationGenerator();
 	}
 
 	/**
@@ -49,6 +50,18 @@ class GeneratorsServiceProvider extends ServiceProvider {
 		});
 
 		$this->commands('command.laracasts.migrate');
+	}
+
+	/**
+	 * Register the make:pivot generator.
+	 */
+	private function registerPivotMigrationGenerator()
+	{
+		$this->app->singleton('command.laracasts.migrate.pivot', function ($app) {
+			return $app['Laracasts\Generators\Commands\PivotMigrationMakeCommand'];
+		});
+
+		$this->commands('command.laracasts.migrate.pivot');
 	}
 
 }
