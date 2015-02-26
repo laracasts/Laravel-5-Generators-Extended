@@ -1,4 +1,4 @@
-# Laravel 5 Extended generators
+# Laravel 5 Extended Generators
 
 If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5.
 
@@ -44,7 +44,7 @@ php artisan make:migration:schema create_users_table --schema="username:string, 
 
 This will give you:
 
-```
+```php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -91,7 +91,7 @@ php artisan make:migration:schema remove_user_id_from_posts_table --schema="user
 
 Now, notice that we're using the correct Schema methods.
 
-```
+```php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -145,7 +145,7 @@ php artisan make:migration:pivot tags posts
 
 Here we pass, in anymore, the names of the two tables that we need a joining/pivot table for. This will give you:
 
-```
+```php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -192,7 +192,7 @@ php artisan make:seed posts
 
 This one is fairly basic. It just gives you a quick seeder class in the "database/seeds" folder.
 
-```
+```php
 <?php
 
 use Illuminate\Database\Seeder;
