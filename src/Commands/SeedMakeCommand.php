@@ -46,7 +46,7 @@ class SeedMakeCommand extends GeneratorCommand {
 	 */
 	protected function getStub()
 	{
-		return __DIR__.'/stubs/seed.stub';
+		return __DIR__.'/../stubs/seed.stub';
 	}
 
 	/**
