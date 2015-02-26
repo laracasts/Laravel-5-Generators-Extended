@@ -171,6 +171,14 @@ class SyntaxBuilder
     {
         $syntax = sprintf("\$table->%s('%s')", $field['type'], $field['name']);
 
+        // If there are arguments for the schema type, like decimal('amount', 5, 2)
+        // then we have to remember to work those in.
+        if ($field['arguments']) {
+            $syntax = substr($syntax, 0, -1) . ', ';
+
+            $syntax .= implode(', ', $field['arguments']) . ')';
+        }
+
         foreach ($field['options'] as $method => $value) {
             $syntax .= sprintf("->%s(%s)", $method, $value === true ? '' : $value);
         }

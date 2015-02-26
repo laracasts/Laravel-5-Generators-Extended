@@ -34,7 +34,7 @@ class SchemaParser
      */
     private function getFields($schema)
     {
-        return preg_split('/\s?,\s?/', $schema);
+        return preg_split('/\s?,\s/', $schema);
     }
 
     /**
@@ -47,11 +47,19 @@ class SchemaParser
     {
         $segments = explode(':', $field);
 
-        return [
-            'name' => array_shift($segments),
-            'type' => array_shift($segments),
-            'options' => $this->parseOptions($segments)
-        ];
+        $name = array_shift($segments);
+        $type = array_shift($segments);
+        $arguments = [];
+        $options = $this->parseOptions($segments);
+
+        // Do we have arguments being used here?
+        // Like: string(100)
+        if (preg_match('/(.+?)\(([^)]+)\)/', $type, $matches)) {
+            $type = $matches[1];
+            $arguments = explode(',', $matches[2]);
+        }
+
+        return compact('name', 'type', 'arguments', 'options');
     }
 
     /**

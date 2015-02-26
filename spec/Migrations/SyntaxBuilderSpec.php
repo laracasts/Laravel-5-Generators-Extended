@@ -17,6 +17,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
         $schema = [[
             "name"    => "email",
             "type"    => "string",
+            "arguments" => ["100"],
             "options" => [
                 "unique"   => true,
                 "nullable" => true,
@@ -34,7 +35,7 @@ function getStub() {
     return <<<EOT
 Schema::create('{{table}}', function(Blueprint \$table) {
             \$table->increments('id');
-            \$table->string('email')->unique()->nullable()->default("foo@example.com");
+            \$table->string('email', 100)->unique()->nullable()->default("foo@example.com");
             \$table->timestamps();
         });
 EOT;
