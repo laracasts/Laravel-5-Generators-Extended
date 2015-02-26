@@ -1,0 +1,22 @@
+{
+  "name": "laracasts/generators",
+  "description": "Extend Laravel 5's generators.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jeffrey Way",
+      "email": "jeffrey@laracasts.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "~2.1",
+  },
+  "autoload": {
+    "psr-4": {
+      "Laracasts\\Generators": "src/"
+    }
+  }
+}
