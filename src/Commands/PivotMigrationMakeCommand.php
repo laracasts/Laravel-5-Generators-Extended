@@ -69,7 +69,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getPath($name = null)
     {
-        return './database/migrations/' . date('Y_m_d_His') . '_create_' . $this->getPivotTableName() . '_pivot_table.php';
+        return './database/migrations/' . date('Y_m_d_His') .
+               '_create_' . $this->getPivotTableName() . '_pivot_table.php';
     }
 
     /**
@@ -83,8 +84,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
         $stub = $this->files->get($this->getStub());
 
         return $this->replacePivotTableName($stub)
-            ->replaceSchema($stub)
-            ->replaceClass($stub, $name);
+                    ->replaceSchema($stub)
+                    ->replaceClass($stub, $name);
     }
 
     /**
@@ -93,7 +94,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      * @param  string $stub
      * @return $this
      */
-    public function replacePivotTableName(&$stub)
+    protected function replacePivotTableName(&$stub)
     {
         $stub = str_replace('{{pivotTableName}}', $this->getPivotTableName(), $stub);
 
@@ -106,7 +107,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      * @param  string $stub
      * @return $this
      */
-    public function replaceSchema(&$stub)
+    protected function replaceSchema(&$stub)
     {
         $tables = $this->getSortedTableNames();
 
@@ -124,7 +125,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      *
      * @return string
      */
-    public function getPivotTableName()
+    protected function getPivotTableName()
     {
         return implode('_', array_map('str_singular', $this->getSortedTableNames()));
     }
@@ -134,7 +135,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    private function getSortedTableNames()
+    protected function getSortedTableNames()
     {
         $tables = [
             strtolower($this->argument('tableOne')),
