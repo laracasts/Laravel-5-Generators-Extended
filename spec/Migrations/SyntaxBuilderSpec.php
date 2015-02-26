@@ -23,9 +23,6 @@ class SyntaxBuilderSpec extends ObjectBehavior
             ]
         ]];
 
-        $desiredSyntax = "\$table->string('email')->unique()->nullable();";
-
-        //$this->create($schema)->shouldBe($desiredSyntax);
         $this->create($schema, ['table' => 'posts', 'action' => 'create'])->shouldBeArray();
     }
 
