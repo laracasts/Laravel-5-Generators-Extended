@@ -4,6 +4,9 @@ namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Laracasts\Generators\MigrationNameParser;
+use Laracasts\Generators\MigrationSchemaParser;
+use Laracasts\Generators\SchemaSyntaxCreator;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -15,7 +18,7 @@ class MigrationMakeCommand extends Command
      *
      * @var string
      */
-    protected $name = 'make:migration';
+    protected $name = 'make:migrations';
 
     /**
      * The console command description.
@@ -112,7 +115,7 @@ class MigrationMakeCommand extends Command
      */
     private function compileMigrationStub()
     {
-        $stub = $this->files->get(__DIR__.'/stubs/migration.stub');
+        $stub = $this->files->get(__DIR__.'/../stubs/migration.stub');
 
         $this->replaceClassName($stub)
              ->replaceSchema($stub)
