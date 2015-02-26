@@ -42,6 +42,23 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique"
 ```
 
+Notice the format that we use, when declaring any applicable schema: a comma-separate list...
+
+```
+COLUMN_NAME:COLUMN_TYPE
+```
+
+So any of these will do:
+
+```
+username:string
+body:text
+age:integer
+published_at:date
+excerpt:text:nullable
+email:string:unique:default('foo@example.com')
+```
+
 This will give you:
 
 ```php
@@ -125,6 +142,13 @@ class RemoveUserIdFromPostsTable extends Migration {
 
 }
 ```
+
+Here's a few other examples of commands that you might write:
+
+- `php artisan make:migration:schema create_posts_table`
+- `php artisan make:migration:schema create_posts_table --schema="title:string, body:text, excerpt:string:nullable`
+- `php artisan make:migration:schema remove_excerpt_from_posts_table --schema="excerpt:string:nullable"
+
 
 Now, when you create a migration, you typically want a model to go with it, right? By default, we'll go ahead and create an Eloquent model to go with your migration.
 This means, if you run, say:
