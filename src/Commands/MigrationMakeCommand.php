@@ -5,6 +5,7 @@ namespace Laracasts\Generators\Commands;
 use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Composer;
 use Laracasts\Generators\Migrations\NameParser;
 use Laracasts\Generators\Migrations\SchemaParser;
 use Laracasts\Generators\Migrations\SyntaxBuilder;
@@ -44,22 +45,23 @@ class MigrationMakeCommand extends Command
     protected $meta;
 
     /**
-     * @var MigrationNameParser
+     * @var Composer
      */
-    protected $parser;
+    private $composer;
 
     /**
      * Create a new command instance.
      *
      * @param Filesystem $files
      * @param NameParser $parser
+     * @param Composer   $composer
      */
-    public function __construct(Filesystem $files, NameParser $parser)
+    public function __construct(Filesystem $files, Composer $composer)
     {
         parent::__construct();
 
         $this->files = $files;
-        $this->parser = $parser;
+        $this->composer = $composer;
     }
 
     /**
@@ -69,6 +71,17 @@ class MigrationMakeCommand extends Command
      */
     public function fire()
     {
+        $this->meta = (new NameParser)->parse($this->argument('name'));
+
+        $this->makeMigration();
+        $this->makeModel();
+    }
+
+    /**
+     * Generate the desired migration.
+     */
+    protected function makeMigration()
+    {
         $name = $this->argument('name');
 
         if ($this->files->exists($path = $this->getPath($name)))
@@ -76,15 +89,28 @@ class MigrationMakeCommand extends Command
             return $this->error($this->type.' already exists!');
         }
 
-        $this->meta = $this->parser->parse($name);
-
         $this->makeDirectory($path);
 
         $this->files->put($path, $this->compileMigrationStub());
 
         $this->info('Migration created successfully.');
 
-        $this->makeModel();
+        $this->composer->dumpAutoloads();
+    }
+
+    /**
+     * Generate an Eloquent model, if the user wishes.
+     */
+    protected function makeModel()
+    {
+        $modelPath = $this->getModelPath($this->getModelName());
+
+        if ($this->option('model') && ! $this->files->exists($modelPath)) {
+            $this->call('make:model', [
+                'name' => $this->getModelName(),
+                '--no-migration' => true
+            ]);
+        }
     }
 
     /**
@@ -135,8 +161,8 @@ class MigrationMakeCommand extends Command
         $stub = $this->files->get(__DIR__.'/../stubs/migration.stub');
 
         $this->replaceClassName($stub)
-             ->replaceSchema($stub)
-             ->replaceTableName($stub);
+            ->replaceSchema($stub)
+            ->replaceTableName($stub);
 
         return $stub;
     }
@@ -188,21 +214,6 @@ class MigrationMakeCommand extends Command
         $stub = str_replace(['{{schema_up}}', '{{schema_down}}'], $schema, $stub);
 
         return $this;
-    }
-
-    /**
-     * Generate an Eloquent model, if the user wishes.
-     */
-    protected function makeModel()
-    {
-        $modelPath = $this->getModelPath($this->getModelName());
-
-        if ($this->option('model') && ! $this->files->exists($modelPath)) {
-            $this->call('make:model', [
-                'name' => $this->getModelName(),
-                '--no-migration' => true
-            ]);
-        }
     }
 
     /**
