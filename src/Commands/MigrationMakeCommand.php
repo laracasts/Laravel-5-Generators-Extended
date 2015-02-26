@@ -2,6 +2,7 @@
 
 namespace Laracasts\Generators\Commands;
 
+use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laracasts\Generators\Migrations\NameParser;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class MigrationMakeCommand extends Command
 {
+    use AppNamespaceDetectorTrait;
 
     /**
      * The console command name.
@@ -81,6 +83,8 @@ class MigrationMakeCommand extends Command
         $this->files->put($path, $this->compileMigrationStub());
 
         $this->info('Migration created successfully.');
+
+        $this->makeModel();
     }
 
     /**
@@ -106,6 +110,19 @@ class MigrationMakeCommand extends Command
     protected function getPath($name)
     {
         return './database/migrations/'.date('Y_m_d_His').'_'.$name.'.php';
+    }
+
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getModelPath($name)
+    {
+        $name = str_replace($this->getAppNamespace(), '', $name);
+
+        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'.php';
     }
 
     /**
@@ -171,6 +188,31 @@ class MigrationMakeCommand extends Command
     }
 
     /**
+     * Generate an Eloquent model, if the user wishes.
+     */
+    protected function makeModel()
+    {
+        $modelPath = $this->getModelPath($this->getModelName());
+
+        if ($this->option('model') && ! $this->files->exists($modelPath)) {
+            $this->call('make:model', [
+                'name' => $this->getModelName(),
+                '--no-migration' => true
+            ]);
+        }
+    }
+
+    /**
+     * Get the class name for the Eloquent model generator.
+     *
+     * @return string
+     */
+    protected function getModelName()
+    {
+        return ucwords(str_singular(camel_case($this->meta['table'])));
+    }
+
+    /**
      * Get the console command arguments.
      *
      * @return array
@@ -191,6 +233,7 @@ class MigrationMakeCommand extends Command
     {
         return [
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
+            ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
         ];
     }
 

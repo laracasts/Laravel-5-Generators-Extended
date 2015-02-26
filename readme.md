@@ -39,7 +39,7 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 ### Migrations With Schema
 
 ```
-php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique, password:string"
+php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique"
 ```
 
 This will give you:
@@ -63,7 +63,6 @@ class CreateUsersTable extends Migration {
             $table->increments('id');
             $table->string('username');
             $table->string('email')->unique();
-            $table->string('password');
             $table->timestamps();
         });
 	}
@@ -126,6 +125,15 @@ class RemoveUserIdFromPostsTable extends Migration {
 
 }
 ```
+
+Now, when you create a migration, you typically want a model to go with it, right? By default, we'll go ahead and create an Eloquent model to go with your migration.
+This means, if you run, say:
+
+```
+php artisan make:migration:schema create_dogs_table --schema="name:string"
+```
+
+You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=false` flag/option.
 
 ### Pivot Tables
 
