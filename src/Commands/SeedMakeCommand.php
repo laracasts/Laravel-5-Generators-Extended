@@ -36,7 +36,7 @@ class SeedMakeCommand extends GeneratorCommand {
 	 */
 	protected function parseName($name)
 	{
-		return $name . 'TableSeeder';
+		return ucwords(camel_case($name)) . 'TableSeeder';
 	}
 
 	/**
