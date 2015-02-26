@@ -39,6 +39,9 @@ class GeneratorsServiceProvider extends ServiceProvider {
 		$this->commands('command.laracasts.seed');
 	}
 
+	/**
+	 * Register the make:migration generator.
+	 */
 	private function registerMigrationGenerator()
 	{
 		$this->app->singleton('command.laracasts.migration', function ($app) {
