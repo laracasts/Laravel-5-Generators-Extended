@@ -1,6 +1,6 @@
 <?php
 
-namespace Laracasts\Generators;
+namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
