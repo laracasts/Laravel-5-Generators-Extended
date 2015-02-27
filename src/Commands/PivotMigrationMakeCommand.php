@@ -21,7 +21,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new migration pivot class.';
+    protected $description = 'Create a new migration pivot class';
 
     /**
      * The type of class being generated.
