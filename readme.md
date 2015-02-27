@@ -25,7 +25,7 @@ composer require 'laracasts/generators' --dev
 Open `config/app.php` and, to your "providers" array at the bottom, add:
 
 ```
-"Laracasts\Generators\GeneratorsServiceProvider"
+'Laracasts\Generators\GeneratorsServiceProvider'
 ```
 
 ### Step 3: Run Artisan!
