@@ -34,7 +34,9 @@ class SchemaParser
      */
     private function getFields($schema)
     {
-        return preg_split('/\s?,\s/', $schema);
+        $preg_split = preg_split('/,(?![^()]*+\\))/', $schema);
+
+        return array_map("trim", $preg_split);
     }
 
     /**
