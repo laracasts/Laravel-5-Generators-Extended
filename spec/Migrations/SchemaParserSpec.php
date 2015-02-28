@@ -40,4 +40,20 @@ class SchemaParserSpec extends ObjectBehavior
             ['name' => 'amount', 'type' => 'decimal', 'arguments' => ['5', '2'], 'options' => []]
         ]);
     }
+
+    function it_parses_schema_with_multiple_fields_using_no_spaces()
+    {
+        $this->parse('name:string,age:integer')->shouldReturn([
+            ['name' => 'name', 'type' => 'string', 'arguments' => [], 'options' => []],
+            ['name' => 'age', 'type' => 'integer', 'arguments' => [], 'options' => []],
+        ]);
+    }
+
+    function it_parses_schema_with_multiple_fields_containing_arguments_using_no_spaces()
+    {
+        $this->parse('name:string,amount:decimal(5,2)')->shouldReturn([
+            ['name' => 'name', 'type' => 'string', 'arguments' => [], 'options' => []],
+            ['name' => 'amount', 'type' => 'decimal', 'arguments' => ['5', '2'], 'options' => []]
+        ]);
+    }
 }
