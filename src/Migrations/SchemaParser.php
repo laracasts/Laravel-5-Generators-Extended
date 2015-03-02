@@ -6,7 +6,14 @@ class SchemaParser
 {
 
     /**
-     * Parse the migration schema.
+     * The parsed schema.
+     *
+     * @var array
+     */
+    private $schema = [];
+
+    /**
+     * Parse the command line migration schema.
      * Ex: name:string, age:integer:nullable
      *
      * @param  string $schema
@@ -14,16 +21,41 @@ class SchemaParser
      */
     public function parse($schema)
     {
-        $fields = $this->getFields($schema);
-        $schema = [];
+        $fields = $this->splitIntoFields($schema);
 
         foreach ($fields as $field) {
-            $segments = $this->getDetails($field);
+            $segments = $this->parseSegments($field);
 
-            $schema[] = $segments;
+            if ($this->fieldNeedsForeignConstraint($segments)) {
+                unset($segments['options']['foreign']);
+
+                // If the user wants a foreign constraint, then
+                // we'll first add the regular field.
+                $this->addField($segments);
+
+                // And then add another field for the constraint.
+                $this->addForeignConstraint($segments);
+
+                continue;
+            }
+
+            $this->addField($segments);
         }
 
-        return $schema;
+        return $this->schema;
+    }
+
+    /**
+     * Add a field to the schema array.
+     *
+     * @param  array $field
+     * @return $this
+     */
+    private function addField($field)
+    {
+        $this->schema[] = $field;
+
+        return $this;
     }
 
     /**
@@ -32,18 +64,18 @@ class SchemaParser
      * @param  string $schema
      * @return array
      */
-    private function getFields($schema)
+    private function splitIntoFields($schema)
     {
         return preg_split('/,\s?(?![^()]*\))/', $schema);
     }
 
     /**
-     * Get the details of the schema field.
+     * Get the segments of the schema field.
      *
      * @param  string $field
      * @return array
      */
-    private function getDetails($field)
+    private function parseSegments($field)
     {
         $segments = explode(':', $field);
 
@@ -84,4 +116,45 @@ class SchemaParser
 
         return $results;
     }
+
+    /**
+     * Add a foreign constraint field to the schema.
+     *
+     * @param array $segments
+     */
+    private function addForeignConstraint($segments)
+    {
+        $string = sprintf(
+            "%s:foreign:references('id'):on('%s')",
+            $segments['name'],
+            $this->getTableNameFromForeignKey($segments['name'])
+        );
+
+        $this->addField($this->parseSegments($string));
+    }
+
+    /**
+     * Try to figure out the name of a table from a foreign key.
+     * Ex: user_id => users
+     *
+     * @param  string $key
+     * @return string
+     */
+    private function getTableNameFromForeignKey($key)
+    {
+        return str_plural(str_replace('_id', '', $key));
+    }
+
+    /**
+     * Determine if the user wants a foreign constraint for the field.
+     *
+     * @param  array $segments
+     * @return bool
+     */
+    private function fieldNeedsForeignConstraint($segments)
+    {
+        return array_key_exists('foreign', $segments['options']);
+    }
+
 }
+
