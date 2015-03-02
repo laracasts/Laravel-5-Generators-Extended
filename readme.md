@@ -184,7 +184,7 @@ $table->foreign('user_id')->references('id')->on('users');
 
 As such, for that full command, our schema should look like so:
 
-``
+```
 Schema::create('posts', function(Blueprint $table) {
 	$table->increments('id');
 	$table->integer('user_id');
