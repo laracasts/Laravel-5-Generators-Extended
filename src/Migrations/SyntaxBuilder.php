@@ -6,7 +6,6 @@ use Laracasts\Generators\GeneratorException;
 
 class SyntaxBuilder
 {
-
     /**
      * A template to be inserted.
      *
@@ -17,8 +16,8 @@ class SyntaxBuilder
     /**
      * Create the PHP syntax for the given schema.
      *
-     * @param  array  $schema
-     * @param  array  $meta
+     * @param  array $schema
+     * @param  array $meta
      * @return string
      */
     public function create($schema, $meta)
@@ -33,7 +32,7 @@ class SyntaxBuilder
      * Create the schema for the "up" method.
      *
      * @param  string $schema
-     * @param  array  $meta
+     * @param  array $meta
      * @return string
      * @throws GeneratorException
      */
@@ -149,9 +148,9 @@ class SyntaxBuilder
      */
     private function constructSchema($schema, $direction = 'Add')
     {
-        if ( ! $schema) return '';
+        if (!$schema) return '';
 
-        $fields = array_map(function($field) use ($direction) {
+        $fields = array_map(function ($field) use ($direction) {
             $method = "{$direction}Column";
 
             return $this->$method($field);
@@ -196,5 +195,4 @@ class SyntaxBuilder
     {
         return sprintf("\$table->dropColumn('%s');", $field['name']);
     }
-
 }
