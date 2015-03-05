@@ -15,11 +15,11 @@ class SyntaxBuilderSpec extends ObjectBehavior
     function it_creates_the_php_syntax_for_the_schema()
     {
         $schema = [[
-            "name"    => "email",
-            "type"    => "string",
+            "name" => "email",
+            "type" => "string",
             "arguments" => ["100"],
             "options" => [
-                "unique"   => true,
+                "unique" => true,
                 "nullable" => true,
                 "default" => '"foo@example.com"'
             ]
@@ -31,7 +31,8 @@ class SyntaxBuilderSpec extends ObjectBehavior
 
 }
 
-function getStub() {
+function getStub()
+{
     return <<<EOT
 Schema::create('{{table}}', function(Blueprint \$table) {
             \$table->increments('id');

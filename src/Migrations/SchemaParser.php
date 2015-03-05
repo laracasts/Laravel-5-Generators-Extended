@@ -4,7 +4,6 @@ namespace Laracasts\Generators\Migrations;
 
 class SchemaParser
 {
-
     /**
      * The parsed schema.
      *
@@ -155,6 +154,5 @@ class SchemaParser
     {
         return array_key_exists('foreign', $segments['options']);
     }
-
 }
 

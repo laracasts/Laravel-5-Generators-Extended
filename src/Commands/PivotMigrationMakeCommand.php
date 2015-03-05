@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 class PivotMigrationMakeCommand extends GeneratorCommand
 {
-
     /**
      * The console command name.
      *
@@ -35,7 +34,9 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      *
      * @return string
      */
-    protected function getNameInput() {}
+    protected function getNameInput()
+    {
+    }
 
     /**
      * Parse the name and format.
@@ -70,7 +71,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected function getPath($name = null)
     {
         return './database/migrations/' . date('Y_m_d_His') .
-               '_create_' . $this->getPivotTableName() . '_pivot_table.php';
+        '_create_' . $this->getPivotTableName() . '_pivot_table.php';
     }
 
     /**
@@ -84,8 +85,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
         $stub = $this->files->get($this->getStub());
 
         return $this->replacePivotTableName($stub)
-                    ->replaceSchema($stub)
-                    ->replaceClass($stub, $name);
+            ->replaceSchema($stub)
+            ->replaceClass($stub, $name);
     }
 
     /**
@@ -159,5 +160,4 @@ class PivotMigrationMakeCommand extends GeneratorCommand
             ['tableTwo', InputArgument::REQUIRED, 'The name of the second table.']
         ];
     }
-
 }

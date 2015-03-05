@@ -4,7 +4,6 @@ namespace Laracasts\Generators\Migrations;
 
 class NameParser
 {
-
     /**
      * Parse the migration name into something we can use.
      *
@@ -21,7 +20,7 @@ class NameParser
 
         return [
             'action' => $this->getAction($segments),
-            'table'  => $this->getTableName($segments)
+            'table' => $this->getTableName($segments)
         ];
     }
 
@@ -96,5 +95,4 @@ class NameParser
 
         return in_array($segment, $connectors);
     }
-
 }

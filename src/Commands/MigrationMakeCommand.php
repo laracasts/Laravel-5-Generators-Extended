@@ -54,7 +54,7 @@ class MigrationMakeCommand extends Command
      *
      * @param Filesystem $files
      * @param NameParser $parser
-     * @param Composer   $composer
+     * @param Composer $composer
      */
     public function __construct(Filesystem $files, Composer $composer)
     {
@@ -84,9 +84,8 @@ class MigrationMakeCommand extends Command
     {
         $name = $this->argument('name');
 
-        if ($this->files->exists($path = $this->getPath($name)))
-        {
-            return $this->error($this->type.' already exists!');
+        if ($this->files->exists($path = $this->getPath($name))) {
+            return $this->error($this->type . ' already exists!');
         }
 
         $this->makeDirectory($path);
@@ -105,7 +104,7 @@ class MigrationMakeCommand extends Command
     {
         $modelPath = $this->getModelPath($this->getModelName());
 
-        if ($this->option('model') && ! $this->files->exists($modelPath)) {
+        if ($this->option('model') && !$this->files->exists($modelPath)) {
             $this->call('make:model', [
                 'name' => $this->getModelName(),
                 '--no-migration' => true
@@ -116,13 +115,12 @@ class MigrationMakeCommand extends Command
     /**
      * Build the directory for the class if necessary.
      *
-     * @param  string  $path
+     * @param  string $path
      * @return string
      */
     protected function makeDirectory($path)
     {
-        if ( ! $this->files->isDirectory(dirname($path)))
-        {
+        if (!$this->files->isDirectory(dirname($path))) {
             $this->files->makeDirectory(dirname($path), 0777, true, true);
         }
     }
@@ -135,20 +133,20 @@ class MigrationMakeCommand extends Command
      */
     protected function getPath($name)
     {
-        return './database/migrations/'.date('Y_m_d_His').'_'.$name.'.php';
+        return './database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
     }
 
     /**
      * Get the destination class path.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return string
      */
     protected function getModelPath($name)
     {
         $name = str_replace($this->getAppNamespace(), '', $name);
 
-        return $this->laravel['path'].'/'.str_replace('\\', '/', $name).'.php';
+        return $this->laravel['path'] . '/' . str_replace('\\', '/', $name) . '.php';
     }
 
     /**
@@ -158,7 +156,7 @@ class MigrationMakeCommand extends Command
      */
     protected function compileMigrationStub()
     {
-        $stub = $this->files->get(__DIR__.'/../stubs/migration.stub');
+        $stub = $this->files->get(__DIR__ . '/../stubs/migration.stub');
 
         $this->replaceClassName($stub)
             ->replaceSchema($stub)
@@ -250,5 +248,4 @@ class MigrationMakeCommand extends Command
             ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
         ];
     }
-
 }
