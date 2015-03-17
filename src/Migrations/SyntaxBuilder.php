@@ -156,6 +156,14 @@ class SyntaxBuilder
             return $this->$method($field);
         }, $schema);
 
+        /**
+         * remove any duplicated field definitions e.g when dropping a foreign
+         * column
+         *
+         * @see https://github.com/laracasts/Laravel-5-Generators-Extended/issues/21
+         */
+        $fields = array_unique($fields);
+
         return implode("\n" . str_repeat(' ', 12), $fields);
     }
 
