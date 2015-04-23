@@ -9,6 +9,7 @@ L5 includes a bunch of generators out of the box, so this package only needs to 
 - `make:migration:schema`
 - `make:migration:pivot`
 - `make:seed`
+- `make:view`
 
 *With one or two more to come.*
 
@@ -43,6 +44,7 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 - [Migrations With Schema](#migrations-with-schema)
 - [Pivot Tables](#pivot-tables)
 - [Database Seeders](#database-seeders)
+- [Generate View](#generate-view)
 
 ### Migrations With Schema
 
@@ -277,3 +279,13 @@ class PostsTableSeeder extends Seeder {
 
 }
 ```
+
+### Generate View
+
+Just give it the name of the view as if you're referring it from your code... 
+
+```
+php artisan make:view frontend.layout
+```
+
+... and it will create the file `resources/views/frontend/layout.blade.php`. It couldn't be more easy.
