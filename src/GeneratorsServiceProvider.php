@@ -26,6 +26,7 @@ class GeneratorsServiceProvider extends ServiceProvider
         $this->registerSeedGenerator();
         $this->registerMigrationGenerator();
         $this->registerPivotMigrationGenerator();
+        $this->registerViewGenerator();
     }
 
     /**
@@ -62,5 +63,17 @@ class GeneratorsServiceProvider extends ServiceProvider
         });
 
         $this->commands('command.laracasts.migrate.pivot');
+    }
+
+    /**
+     * Register the make:view generator.
+     */
+    private function registerViewGenerator()
+    {
+        $this->app->singleton('command.laracasts.view', function ($app) {
+            return $app['Laracasts\Generators\Commands\ViewMakeCommand'];
+        });
+
+        $this->commands('command.laracasts.view');
     }
 }
