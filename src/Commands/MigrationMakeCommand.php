@@ -106,7 +106,8 @@ class MigrationMakeCommand extends Command
 
         if ($this->option('model') && !$this->files->exists($modelPath)) {
             $this->call('make:model', [
-                'name' => $this->getModelName()
+                'name' => $this->getModelName(),
+                '--no-migration' => InputOption::VALUE_NONE
             ]);
         }
     }
