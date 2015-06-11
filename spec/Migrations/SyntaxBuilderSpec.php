@@ -34,7 +34,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
 function getStub()
 {
     return <<<EOT
-Schema::create('{{table}}', function(Blueprint \$table) {
+Schema::create('{{table}}', function (Blueprint \$table) {
             \$table->increments('id');
             \$table->string('email', 100)->unique()->nullable()->default("foo@example.com");
             \$table->timestamps();
