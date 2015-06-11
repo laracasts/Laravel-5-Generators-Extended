@@ -12,7 +12,7 @@ class {{class}} extends Migration
      */
     public function up()
     {
-        Schema::create('{{pivotTableName}}', function(Blueprint $table) {
+        Schema::create('{{pivotTableName}}', function (Blueprint $table) {
             $table->integer('{{columnOne}}_id')->unsigned()->index();
             $table->foreign('{{columnOne}}_id')->references('id')->on('{{tableOne}}')->onDelete('cascade');
             $table->integer('{{columnTwo}}_id')->unsigned()->index();
