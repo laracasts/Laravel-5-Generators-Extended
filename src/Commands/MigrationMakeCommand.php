@@ -104,7 +104,7 @@ class MigrationMakeCommand extends Command
     {
         $modelPath = $this->getModelPath($this->getModelName());
 
-        if ($this->option('model') && !$this->files->exists($modelPath)) {
+        if (!$this->option('no-model') && !$this->files->exists($modelPath)) {
             $this->call('make:model', [
                 'name' => $this->getModelName()
             ]);
@@ -244,7 +244,7 @@ class MigrationMakeCommand extends Command
     {
         return [
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
-            ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
+            ['no-model', null, InputOption::VALUE_NONE, "Don't create a model for this table."],
         ];
     }
 }
