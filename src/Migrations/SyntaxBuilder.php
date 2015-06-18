@@ -150,6 +150,14 @@ class SyntaxBuilder
     {
         if (!$schema) return '';
 
+        if (!$this->hasDefinedIdColumn($schema)) {
+            $schema = $this->addIdColumn($schema);
+        }
+
+        if (!$this->hasDefinedTimestamps($schema)) {
+            $schema = $this->addTimestamps($schema);
+        }
+
         $fields = array_map(function ($field) use ($direction) {
             $method = "{$direction}Column";
 
@@ -168,7 +176,7 @@ class SyntaxBuilder
      */
     private function addColumn($field)
     {
-        $syntax = sprintf("\$table->%s('%s')", $field['type'], $field['name']);
+        $syntax = sprintf("\$table->%s(%s)", $field['type'], empty($field['name']) ? '' : "'$field[name]'");
 
         // If there are arguments for the schema type, like decimal('amount', 5, 2)
         // then we have to remember to work those in.
@@ -194,5 +202,116 @@ class SyntaxBuilder
     private function dropColumn($field)
     {
         return sprintf("\$table->dropColumn('%s');", $field['name']);
+    }
+
+    /**
+     * Check to see if the user has already provided an id field
+     *
+     * @param array $schema
+     *
+     * @return bool
+     */
+    private function hasDefinedIdColumn(array $schema)
+    {
+        foreach ($schema as $definition) {
+            if ($definition['name'] === 'id') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check to see if the user has already defined timestamp field(s)
+     *
+     * @param array $schema
+     *
+     * @return bool
+     */
+    private function hasDefinedTimestamps(array $schema)
+    {
+        $created_at = false;
+        $updated_at = false;
+
+        foreach ($schema as $definition) {
+            if ($definition['name'] === 'created_at') {
+                $created_at = true;
+            } else if ($definition['name'] === 'updated_at') {
+                $updated_at = true;
+            }
+        }
+
+        return ($created_at || $updated_at);
+    }
+
+    /**
+     * Adds an ID field to the beginning of the schema definition
+     *
+     * @param array $schema
+     *
+     * @return array
+     */
+    private function addIdColumn(array $schema)
+    {
+        return $this->appendFieldToSchema($schema, 'id', 'increments');
+    }
+
+    /**
+     * Adds the timestamps option to the end of the schema definition
+     *
+     * @param array $schema
+     *
+     * @return array
+     */
+    private function addTimestamps(array $schema)
+    {
+        return $this->prependFieldToSchema($schema, '', 'timestamps');
+    }
+
+    /**
+     * Adds a field to the start of the schema definition
+     *
+     * @param array  $schema
+     * @param string $name
+     * @param string $type
+     * @param array  $arguments
+     * @param array  $options
+     *
+     * @return array
+     */
+    private function appendFieldToSchema(array $schema, $name, $type, $arguments = [], $options = [])
+    {
+        array_unshift($schema, [
+            'name' => $name,
+            'type' => $type,
+            'arguments' => $arguments,
+            'options' => $options,
+        ]);
+
+        return $schema;
+    }
+
+    /**
+     * Adds a field to the end of the schema definition
+     *
+     * @param array  $schema
+     * @param string $name
+     * @param string $type
+     * @param array  $arguments
+     * @param array  $options
+     *
+     * @return array
+     */
+    private function prependFieldToSchema(array $schema, $name, $type, $arguments = [], $options = [])
+    {
+        array_push($schema, [
+            'name' => $name,
+            'type' => $type,
+            'arguments' => $arguments,
+            'options' => $options,
+        ]);
+
+        return $schema;
     }
 }
