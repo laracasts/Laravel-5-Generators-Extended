@@ -28,7 +28,7 @@ class MigrationMakeCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Create a new migration class, and apply schema at the same time';
+    protected $description = 'Create a new migration class and apply schema at the same time';
 
     /**
      * The filesystem instance.
