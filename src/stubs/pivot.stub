@@ -17,6 +17,7 @@ class DummyClass extends Migration
             $table->foreign('{{columnOne}}_id')->references('id')->on('{{tableOne}}')->onDelete('cascade');
             $table->integer('{{columnTwo}}_id')->unsigned()->index();
             $table->foreign('{{columnTwo}}_id')->references('id')->on('{{tableTwo}}')->onDelete('cascade');
+            $table->primary(['{{columnOne}}_id', '{{columnTwo}}_id']);
         });
     }
 
