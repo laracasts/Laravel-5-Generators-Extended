@@ -38,7 +38,7 @@ class SyntaxBuilder
      */
     private function createSchemaForUpMethod($schema, $meta)
     {
-        $fields = $this->constructSchema($schema);
+        $fields = $this->constructSchema($schema, $meta);
 
         if ($meta['action'] == 'create') {
             return $this->insert($fields)->into($this->getCreateSchemaWrapper());
@@ -49,7 +49,7 @@ class SyntaxBuilder
         }
 
         if ($meta['action'] == 'remove') {
-            $fields = $this->constructSchema($schema, 'Drop');
+            $fields = $this->constructSchema($schema, $meta, 'Drop');
 
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
@@ -77,15 +77,14 @@ class SyntaxBuilder
         // If the user added columns to a table, then for
         // the down method, we should remove them.
         if ($meta['action'] == 'add') {
-            $fields = $this->constructSchema($schema, 'Drop');
-
+            $fields = $this->constructSchema($schema, $meta, 'Drop');
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
 
         // If the user removed columns from a table, then for
         // the down method, we should add them back on.
         if ($meta['action'] == 'remove') {
-            $fields = $this->constructSchema($schema);
+            $fields = $this->constructSchema($schema, $meta);
 
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
@@ -146,16 +145,19 @@ class SyntaxBuilder
      * @param  string $direction
      * @return array
      */
-    private function constructSchema($schema, $direction = 'Add')
+    private function constructSchema($schema, $meta, $direction = 'Add')
     {
         if (!$schema) return '';
 
-        $fields = array_map(function ($field) use ($direction) {
+        $fields = array_map(function ($field) use ($direction, $meta) {
             $method = "{$direction}Column";
 
-            return $this->$method($field);
+            return $this->$method($field, $meta);
         }, $schema);
-
+        if($direction == 'Drop') {
+            // Reverse the order from how we created it
+            $fields = array_reverse($fields);
+        }
         return implode("\n" . str_repeat(' ', 12), $fields);
     }
 
@@ -166,7 +168,7 @@ class SyntaxBuilder
      * @param  string $field
      * @return string
      */
-    private function addColumn($field)
+    private function addColumn($field, $meta)
     {
         $syntax = sprintf("\$table->%s('%s')", $field['type'], $field['name']);
 
@@ -191,8 +193,11 @@ class SyntaxBuilder
      * @param  string $field
      * @return string
      */
-    private function dropColumn($field)
+    private function dropColumn($field, $meta)
     {
+        if($field['type'] == 'foreign') {
+            return sprintf("\$table->dropForeign('%s_%s_foreign');", $meta['table'], $field['name']);
+        }
         return sprintf("\$table->dropColumn('%s');", $field['name']);
     }
 }
