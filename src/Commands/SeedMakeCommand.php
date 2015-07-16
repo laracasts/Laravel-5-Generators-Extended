@@ -3,6 +3,7 @@
 namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
 
 class SeedMakeCommand extends GeneratorCommand
@@ -58,5 +59,32 @@ class SeedMakeCommand extends GeneratorCommand
     protected function getPath($name)
     {
         return './database/seeds/' . str_replace('\\', '/', $name) . '.php';
+    }
+    
+    /**
+     * Build the class with the given name.
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected function buildClass($name = null)
+    {
+        $stub = $this->files->get($this->getStub());
+
+        return $this->replaceClassName($stub, $name);
+    }
+
+    /**
+     * Apply the name of the seed table to the stub.
+     *
+     * @param  string $stub
+     * @param  string $name
+     * @return $this
+     */
+    protected function replaceClassName(&$stub, $name)
+    {
+        $stub = str_replace('{{class}}', ucwords(camel_case($name)), $stub);
+
+        return $stub;
     }
 }
