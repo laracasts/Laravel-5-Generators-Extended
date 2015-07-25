@@ -120,6 +120,20 @@ class PivotMigrationMakeCommand extends GeneratorCommand
 
         return $this;
     }
+    /**
+     * Replace the class name for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $name
+     * @return string
+     */
+    protected function replaceClass($stub, $name)
+    {
+        $class = str_replace($this->getNamespace($name).'\\', '', $name);
+
+        return str_replace('{{class}}', $class, $stub);
+
+    }
 
     /**
      * Get the name of the pivot table.
