@@ -103,6 +103,20 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     }
 
     /**
+    * Apply the name of the class to the stub
+    *
+    * @param string $stub
+    * @param string $name
+    * @return string
+    */
+    protected function replaceClass($stub, $name)
+    {
+        $nameClass = $this->parseName($name);
+
+        return str_replace('{{class}}',$nameClass, $stub);
+    }
+
+    /**
      * Apply the correct schema to the stub.
      *
      * @param  string $stub
