@@ -70,7 +70,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getPath($name = null)
     {
-        return './database/migrations/' . date('Y_m_d_His') .
+        return base_path() . '/database/migrations/' . date('Y_m_d_His') .
         '_create_' . $this->getPivotTableName() . '_pivot_table.php';
     }
 

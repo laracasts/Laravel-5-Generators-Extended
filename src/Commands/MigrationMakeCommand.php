@@ -131,7 +131,7 @@ class MigrationMakeCommand extends Command
      */
     protected function getPath($name)
     {
-        return './database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
+        return base_path() . '/database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
     }
 
     /**
