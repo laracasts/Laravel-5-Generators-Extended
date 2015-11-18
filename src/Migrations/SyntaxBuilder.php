@@ -18,12 +18,13 @@ class SyntaxBuilder
      *
      * @param  array $schema
      * @param  array $meta
+     * @param  array $current
      * @return string
      */
-    public function create($schema, $meta)
+    public function create($schema, $meta, $current = null)
     {
         $up = $this->createSchemaForUpMethod($schema, $meta);
-        $down = $this->createSchemaForDownMethod($schema, $meta);
+        $down = $this->createSchemaForDownMethod($schema, $meta, $current);
 
         return compact('up', 'down');
     }
@@ -48,6 +49,12 @@ class SyntaxBuilder
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
 
+        if ($meta['action'] == 'change') {
+            $fields = $this->constructSchema($schema, 'Change');
+       
+            return $this->insert($fields)->into($this->getChangeSchemaWrapper());
+        }
+
         if ($meta['action'] == 'remove') {
             $fields = $this->constructSchema($schema, 'Drop');
 
@@ -66,7 +73,7 @@ class SyntaxBuilder
      * @return string
      * @throws GeneratorException
      */
-    private function createSchemaForDownMethod($schema, $meta)
+    private function createSchemaForDownMethod($schema, $meta, $current)
     {
         // If the user created a table, then for the down
         // method, we should drop it.
@@ -78,6 +85,14 @@ class SyntaxBuilder
         // the down method, we should remove them.
         if ($meta['action'] == 'add') {
             $fields = $this->constructSchema($schema, 'Drop');
+
+            return $this->insert($fields)->into($this->getChangeSchemaWrapper());
+        }
+
+        // If the user changed columns from a table, then for the down
+        // method, we should change back it.
+        if ($meta['action'] == 'change') {
+            $fields = $this->constructSchema($current, 'Change');
 
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
@@ -183,6 +198,17 @@ class SyntaxBuilder
         }
 
         return $syntax .= ';';
+    }
+
+    /**
+     * Construct the syntax to change a column.
+     *
+     * @param  string $field
+     * @return string
+     */
+    private function changeColumn($field)
+    {        
+        return str_replace(';','->change();',$this->addColumn($field));
     }
 
     /**

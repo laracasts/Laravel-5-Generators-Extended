@@ -205,7 +205,11 @@ class MigrationMakeCommand extends Command
             $schema = (new SchemaParser)->parse($schema);
         }
 
-        $schema = (new SyntaxBuilder)->create($schema, $this->meta);
+        if ($current = $this->option('current')) {
+            $current = (new SchemaParser)->parse($current);
+        }
+
+        $schema = (new SyntaxBuilder)->create($schema, $this->meta, $current);
 
         $stub = str_replace(['{{schema_up}}', '{{schema_down}}'], $schema, $stub);
 
@@ -243,6 +247,7 @@ class MigrationMakeCommand extends Command
     {
         return [
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
+            ['current', null, InputOption::VALUE_OPTIONAL, 'Required when the action is Change the migration', null],
             ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
         ];
     }
