@@ -5,7 +5,6 @@ namespace Laracasts\Generators\Commands;
 use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Composer;
 use Laracasts\Generators\Migrations\NameParser;
 use Laracasts\Generators\Migrations\SchemaParser;
 use Laracasts\Generators\Migrations\SyntaxBuilder;
@@ -55,12 +54,12 @@ class MigrationMakeCommand extends Command
      * @param Filesystem $files
      * @param Composer $composer
      */
-    public function __construct(Filesystem $files, Composer $composer)
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
 
         $this->files = $files;
-        $this->composer = $composer;
+        $this->composer = app()['composer'];
     }
 
     /**
