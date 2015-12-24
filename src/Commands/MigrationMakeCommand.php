@@ -5,7 +5,7 @@ namespace Laracasts\Generators\Commands;
 use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Composer;
+use Illuminate\Support\Composer;
 use Laracasts\Generators\Migrations\NameParser;
 use Laracasts\Generators\Migrations\SchemaParser;
 use Laracasts\Generators\Migrations\SyntaxBuilder;
