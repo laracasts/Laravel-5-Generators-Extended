@@ -173,6 +173,10 @@ php artisan make:migration:schema create_dogs_table --schema="name:string"
 
 You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=false` flag/option.
 
+If you wish to specify a different path for your migration file, you can use the `--path` option like so:
+```
+php artisan make:migration:schema create_dogs_table --path=\database\migrations\pets
+```
 #### Foreign Constraints
 
 There's also a secret bit of sugar for when you need to generate foreign constraints. Imagine that you have a posts table, where each post belongs to a user. Let's try:
