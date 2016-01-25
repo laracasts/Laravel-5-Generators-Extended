@@ -54,6 +54,10 @@ class SyntaxBuilder
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
 
+        if ($meta['action'] == 'drop') {
+            return sprintf("Schema::drop('%s');", $meta['table']);
+        }
+
         // Otherwise, we have no idea how to proceed.
         throw new GeneratorException;
     }
@@ -88,6 +92,13 @@ class SyntaxBuilder
             $fields = $this->constructSchema($schema);
 
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
+        }
+
+        // If the user removed a table, then for
+        // the down method, we should add it back in.
+        if ($meta['action'] == 'drop') {
+            $fields = $this->constructSchema($schema);
+            return $this->insert($fields)->into($this->getCreateSchemaWrapper());
         }
 
         // Otherwise, we have no idea how to proceed.

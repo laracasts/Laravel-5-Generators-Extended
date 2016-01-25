@@ -71,8 +71,9 @@ class NameParser
                 return 'create';
             case 'delete':
             case 'destroy':
-            case 'drop':
                 return 'remove';
+            case 'drop':
+                return 'drop';
             case 'add':
             case 'append':
             case 'update':
