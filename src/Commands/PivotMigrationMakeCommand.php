@@ -47,7 +47,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected function parseName($name)
     {
         $tables = array_map('str_singular', $this->getSortedTableNames());
-        $name = implode('', array_map('ucwords', $tables));
+        $name = ucfirst(camel_case(implode('', array_map('ucwords', $tables))))
 
         return "Create{$name}PivotTable";
     }
