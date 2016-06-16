@@ -82,7 +82,7 @@ class SchemaParser
         $type = array_shift($segments);
         $arguments = [];
         $options = $this->parseOptions($segments);
-		if (array_key_exists('fillable', $options))
+		if (array_key_exists('fillable', $options)) //travis fixes
 		{
 			$fillable = true;
 			unset($options['fillable']);
