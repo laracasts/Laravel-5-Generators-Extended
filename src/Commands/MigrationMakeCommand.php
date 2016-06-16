@@ -296,7 +296,7 @@ class MigrationMakeCommand extends Command
             $schema = (new SchemaParser)->parse($schema);
             foreach($schema as $field)
             {
-                if ($field['fillable'])
+                if (array_key_exists('fillable', $field))
                     $fillable .= '\'' . $field['name'] . '\', ';
             }
         }
@@ -319,7 +319,7 @@ class MigrationMakeCommand extends Command
             $schema = (new SchemaParser)->parse($schema);
             foreach($schema as $field)
             {
-                if ($field['hidden'])
+                if (array_key_exists('hidden', $field))
                     $hidden .= '\'' . $field['name'] . '\', ';
             }
         }
