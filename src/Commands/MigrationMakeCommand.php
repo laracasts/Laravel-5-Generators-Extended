@@ -100,13 +100,21 @@ class MigrationMakeCommand extends Command
      */
     protected function makeModel()
     {
+        if (!$this->option('model')) {
+            return;
+        }
+        
         $modelPath = $this->getModelPath($this->getModelName());
 
-        if ($this->option('model') && !$this->files->exists($modelPath)) {
-            $this->call('make:model', [
-                'name' => $this->getModelName()
-            ]);
+        if ($this->files->exists($modelPath)) {
+            return $this->error($this->getModelName() . ' already exists!');
         }
+        
+        $this->files->put($modelPath, $this->compileModelStub());
+
+        $this->info('Model created successfully.');
+
+        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -244,5 +252,80 @@ class MigrationMakeCommand extends Command
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
             ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
         ];
+    }
+
+    /**
+     * Compile the model stub.
+     *
+     * @return string
+     */
+    protected function compileModelStub()
+    {
+        $stub = $this->files->get(__DIR__ . '/../stubs/model.stub');
+
+        $this->replaceModelName($stub)
+            ->replaceModelFillable($stub)
+            ->replaceModelHidden($stub);
+
+        return $stub;
+    }
+
+    /**
+     * Replace the class name in the stub.
+     *
+     * @param  string $stub
+     * @return $this
+     */
+    protected function replaceModelName(&$stub)
+    {
+        $stub = str_replace('{{class}}', $this->getModelName(), $stub);
+
+        return $this;
+    }
+
+    /**
+     * Replace the fillable fields list in the stub.
+     *
+     * @param  string $stub
+     * @return $this
+     */
+    protected function replaceModelFillable(&$stub)
+    {
+        $fillable = '';
+        if ($schema = $this->option('schema')) {
+            $schema = (new SchemaParser)->parse($schema);
+            foreach($schema as $field)
+            {
+                if ($field['fillable'])
+                    $fillable .= '\'' . $field['name'] . '\', ';
+            }
+        }
+
+        $stub = str_replace('{{fillable}}', $fillable, $stub);
+
+        return $this;
+    }
+
+    /**
+     * Replace the hidden fields list in the stub.
+     *
+     * @param  string $stub
+     * @return $this
+     */
+    protected function replaceModelHidden(&$stub)
+    {
+        $hidden = '';
+        if ($schema = $this->option('schema')) {
+            $schema = (new SchemaParser)->parse($schema);
+            foreach($schema as $field)
+            {
+                if ($field['hidden'])
+                    $hidden .= '\'' . $field['name'] . '\', ';
+            }
+        }
+
+        $stub = str_replace('{{hidden}}', $hidden, $stub);
+
+        return $this;
     }
 }

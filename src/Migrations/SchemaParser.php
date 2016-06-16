@@ -82,6 +82,12 @@ class SchemaParser
         $type = array_shift($segments);
         $arguments = [];
         $options = $this->parseOptions($segments);
+        $fillable = array_key_exists('fillable', $options);
+        if ($fillable)
+            unset($options['fillable']);
+        $hidden = array_key_exists('hidden', $options);
+        if ($hidden)
+            unset($options['hidden']);
 
         // Do we have arguments being used here?
         // Like: string(100)
@@ -90,7 +96,7 @@ class SchemaParser
             $arguments = explode(',', $matches[2]);
         }
 
-        return compact('name', 'type', 'arguments', 'options');
+        return compact('name', 'type', 'arguments', 'options', 'fillable', 'hidden');
     }
 
     /**

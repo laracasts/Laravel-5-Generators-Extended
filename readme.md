@@ -47,7 +47,7 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 ### Migrations With Schema
 
 ```
-php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique"
+php artisan make:migration:schema create_users_table --schema="username:string:hidden, email:string:unique:fillable"
 ```
 
 Notice the format that we use, when declaring any applicable schema: a comma-separate list...
@@ -65,12 +65,14 @@ age:integer
 published_at:date
 excerpt:text:nullable
 email:string:unique:default('foo@example.com')
+
+Added hidden and fillable options to schema generation. This options are used when generating the model from model.stub file.
 ```
 
 Using the schema from earlier...
 
 ```
---schema="username:string, email:string:unique"
+--schema="username:string:hidden, email:string:unique:fillable"
 ```
 
 ...this will give you:
@@ -108,6 +110,35 @@ class CreateUsersTable extends Migration {
 		Schema::drop('users');
 	}
 
+}
+```
+
+```php
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'email',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'username',
+    ];
 }
 ```
 
