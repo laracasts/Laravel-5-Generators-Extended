@@ -82,12 +82,16 @@ class SchemaParser
         $type = array_shift($segments);
         $arguments = [];
         $options = $this->parseOptions($segments);
-        $fillable = array_key_exists('fillable', $options);
-        if ($fillable)
-            unset($options['fillable']);
-        $hidden = array_key_exists('hidden', $options);
-        if ($hidden)
-            unset($options['hidden']);
+		if (array_key_exists('fillable', $options))
+		{
+			$fillable = true;
+			unset($options['fillable']);
+		}
+		if (array_key_exists('hidden', $options))
+		{
+			$hidden = true;
+			unset($options['hidden']);
+		}
 
         // Do we have arguments being used here?
         // Like: string(100)
