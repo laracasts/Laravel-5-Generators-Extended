@@ -57,6 +57,6 @@ class SeedMakeCommand extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return base_path() . '/database/seeds/' . str_replace('\\', '/', $name) . '.php';
+        return base_path() . '/database/seeds/' . date('Y_m_d_His') . "_" . str_replace('\\', '/', $name) . '.php';
     }
 }
