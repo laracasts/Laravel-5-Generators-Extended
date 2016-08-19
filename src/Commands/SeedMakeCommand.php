@@ -50,6 +50,33 @@ class SeedMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Build the class with the given name.
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected function buildClass($name = null)
+    {
+        $stub = $this->files->get($this->getStub());
+
+        return $this->replaceClass($stub, $name);
+    }
+
+    /**
+     * Replace the class name for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $name
+     * @return string
+     */
+    protected function replaceClass($stub, $name)
+    {
+        $stub = str_replace('{{class}}', $name, $stub);
+
+        return $stub;
+    }
+
+    /**
      * Get the destination class path.
      *
      * @param  string $name
