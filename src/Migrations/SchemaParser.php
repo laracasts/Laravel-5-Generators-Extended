@@ -28,12 +28,19 @@ class SchemaParser
             if ($this->fieldNeedsForeignConstraint($segments)) {
                 unset($segments['options']['foreign']);
 
+                // Check to see if the user uses another constraint table
+                $table = null;
+                if( isset( $segments['options']['table'] ) ){
+                    $table = $segments['options']['table'];
+                    unset($segments['options']['table']);
+                }
+
                 // If the user wants a foreign constraint, then
                 // we'll first add the regular field.
                 $this->addField($segments);
 
                 // And then add another field for the constraint.
-                $this->addForeignConstraint($segments);
+                $this->addForeignConstraint($segments,$table);
 
                 continue;
             }
@@ -119,14 +126,18 @@ class SchemaParser
     /**
      * Add a foreign constraint field to the schema.
      *
-     * @param array $segments
+     * @param array  $segments
+     * @param null|string $table
      */
-    private function addForeignConstraint($segments)
+    private function addForeignConstraint($segments,$table = null)
     {
+        if( !isset($table) )
+            $table = $this->getTableNameFromForeignKey( $segments['name'] );
+
         $string = sprintf(
             "%s:foreign:references('id'):on('%s')",
             $segments['name'],
-            $this->getTableNameFromForeignKey($segments['name'])
+            $table
         );
 
         $this->addField($this->parseSegments($string));
