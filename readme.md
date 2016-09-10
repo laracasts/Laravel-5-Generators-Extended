@@ -203,6 +203,14 @@ Schema::create('posts', function(Blueprint $table) {
 
 Neato.
 
+You can also manually specify which table to use as a reference by using the "table" option like this: `logo_id:integer:foreign:table(images)`. You may have a logo image whose path is stored in an `images` table. This will give us:
+
+```
+$table->integer('logo_id');
+$table->foreign('logo_id')->references('id')->on('images');
+```
+
+
 ### Pivot Tables
 
 So you need a migration to setup a pivot table in your database? Easy. We can scaffold the whole class with a single command.
