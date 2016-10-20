@@ -13,7 +13,9 @@ class GeneratorsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__ . '/../config/generators.php' => config_path('generators.php'),
+        ], 'config');
     }
 
     /**
