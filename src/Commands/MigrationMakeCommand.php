@@ -153,7 +153,7 @@ class MigrationMakeCommand extends Command
      */
     protected function compileMigrationStub()
     {
-        $stub = $this->files->get(__DIR__ . '/../stubs/migration.stub');
+        $stub = $this->files->get($this->getStub());
 
         $this->replaceClassName($stub)
             ->replaceSchema($stub)
@@ -245,4 +245,15 @@ class MigrationMakeCommand extends Command
             ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
         ];
     }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return config('generators.stubs.migration', __DIR__ . '/../stubs/migration.stub');
+    }
+
 }

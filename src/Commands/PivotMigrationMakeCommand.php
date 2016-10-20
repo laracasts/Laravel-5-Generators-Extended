@@ -59,7 +59,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/pivot.stub';
+        return config('generators.stubs.pivot', __DIR__ . '/../stubs/pivot.stub');
     }
 
     /**
