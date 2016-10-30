@@ -26,21 +26,25 @@ class SchemaParser
             $segments = $this->parseSegments($field);
 
             if ($this->fieldNeedsForeignConstraint($segments)) {
-                unset($segments['options']['foreign']);
 
-                // Check to see if the user uses another constraint table
+                // Get the foreign table and key
+                $foreignField   = $segments['options']['foreign'];
                 $table = null;
-                if( isset( $segments['options']['table'] ) ){
-                    $table = $segments['options']['table'];
-                    unset($segments['options']['table']);
+                $key   = null;
+
+                if( $foreignField != 1 ){
+                    $foreignOptions = explode(",", $foreignField);
+                    list($table, $key) = count($foreignOptions) == 2 ? $foreignOptions : [$foreignField,null];
                 }
+
+                unset($segments['options']['foreign']);
 
                 // If the user wants a foreign constraint, then
                 // we'll first add the regular field.
                 $this->addField($segments);
 
                 // And then add another field for the constraint.
-                $this->addForeignConstraint($segments,$table);
+                $this->addForeignConstraint($segments,$table,$key);
 
                 continue;
             }
@@ -126,17 +130,22 @@ class SchemaParser
     /**
      * Add a foreign constraint field to the schema.
      *
-     * @param array  $segments
+     * @param array       $segments
      * @param null|string $table
+     * @param null|string $key
      */
-    private function addForeignConstraint($segments,$table = null)
+    private function addForeignConstraint($segments,$table = null, $key = null)
     {
         if( !isset($table) )
             $table = $this->getTableNameFromForeignKey( $segments['name'] );
 
+        if( !isset($key) )
+            $key = 'id';
+
         $string = sprintf(
-            "%s:foreign:references('id'):on('%s')",
+            "%s:foreign:references('%s'):on('%s')",
             $segments['name'],
+            $key,
             $table
         );
 
