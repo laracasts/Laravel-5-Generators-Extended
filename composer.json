@@ -1,5 +1,5 @@
 {
-  "name": "laracasts/generators",
+  "name": "yolcar/generators",
   "description": "Extend Laravel 5's generators.",
   "keywords": ["laravel", "generators"],
   "license": "MIT",
