@@ -2,7 +2,7 @@
 
 namespace Laracasts\Generators\Commands;
 
-use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Laracasts\Generators\Migrations\NameParser;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class MigrationMakeCommand extends Command
 {
-    use AppNamespaceDetectorTrait;
+    use DetectsApplicationNamespace;
 
     /**
      * The console command name.
