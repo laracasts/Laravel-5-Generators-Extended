@@ -153,8 +153,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected function getSortedTableNames()
     {
         $tables = [
-            strtolower($this->argument('tableOne')),
-            strtolower($this->argument('tableTwo'))
+            strtolower(str_plural($this->argument('tableOne'))),
+            strtolower(str_plural($this->argument('tableTwo')))
         ];
 
         sort($tables);
