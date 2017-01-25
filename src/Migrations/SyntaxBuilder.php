@@ -168,8 +168,12 @@ class SyntaxBuilder
      */
     private function addColumn($field)
     {
-        $syntax = sprintf("\$table->%s('%s')", $field['type'], $field['name']);
-
+        if($field['name'] == 'softDeletes') {
+           $syntax = sprintf("\$table->%s()", $field['name']);
+        } else {
+           $syntax = sprintf("\$table->%s('%s')", $field['type'], $field['name']);
+        }
+        
         // If there are arguments for the schema type, like decimal('amount', 5, 2)
         // then we have to remember to work those in.
         if ($field['arguments']) {
