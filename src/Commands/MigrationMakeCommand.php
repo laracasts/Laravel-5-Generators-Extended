@@ -98,7 +98,8 @@ class MigrationMakeCommand extends Command
 
         $this->files->put($path, $this->compileMigrationStub());
 
-        $this->info('Migration created successfully.');
+        $filename = pathinfo($path, PATHINFO_FILENAME);
+        $this->line("<info>Created Migration:</info> {$filename}");
 
         $this->composer->dumpAutoloads();
     }
