@@ -38,7 +38,6 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     {
         return $this->parseName($this->getPivotTableName());
     }
-    
     /**
      * Execute the console command.
      *

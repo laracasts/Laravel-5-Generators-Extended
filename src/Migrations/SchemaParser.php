@@ -28,10 +28,6 @@ class SchemaParser
             if ($this->fieldNeedsForeignConstraint($segments)) {
                 unset($segments['options']['foreign']);
 
-                // If the user wants a foreign constraint, then
-                // we'll first add the regular field.
-                $this->addField($segments);
-
                 // And then add another field for the constraint.
                 $this->addForeignConstraint($segments);
 
@@ -123,6 +119,20 @@ class SchemaParser
      */
     private function addForeignConstraint($segments)
     {
+        /*
+         * First generate the unsigned indexed integer field
+         */
+        $field = sprintf(
+            "%s:integer:unsigned:index",
+            $segments['name'],
+            $this->getTableNameFromForeignKey($segments['name'])
+        );
+
+        $this->addField($this->parseSegments($field));
+        
+        /*
+         * Then build the fk
+         */
         $string = sprintf(
             "%s:foreign:references('id'):on('%s')",
             $segments['name'],
