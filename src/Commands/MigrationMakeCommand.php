@@ -65,7 +65,7 @@ class MigrationMakeCommand extends Command
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $this->meta = (new NameParser)->parse($this->argument('name'));
 
