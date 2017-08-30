@@ -20,5 +20,12 @@
     "psr-4": {
       "Laracasts\\Generators\\": "src/"
     }
+  },
+  "extra": {
+      "laravel": {
+          "providers": [
+              "Laracasts\\Generators\\GeneratorsServiceProvider"
+          ]
+      }
   }
 }
