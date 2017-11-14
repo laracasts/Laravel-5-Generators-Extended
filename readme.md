@@ -12,7 +12,21 @@ L5 includes a bunch of generators out of the box, so this package only needs to 
 
 *With one or two more to come.*
 
-## Usage
+
+## Usage on Laravel 5.5
+
+### Step 1: Install Through Composer
+
+```
+composer require laracasts/generators --dev
+```
+
+### Step 2: Run Artisan!
+
+You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
+
+
+## Usage on Laravel 5.4 and 5.3
 
 ### Step 1: Install Through Composer
 
