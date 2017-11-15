@@ -195,7 +195,7 @@ There's also a secret bit of sugar for when you need to generate foreign constra
 php artisan make:migration:schema create_posts_table --schema="user_id:integer:foreign, title:string, body:text"
 ```
 
-Notice that "foreign" option (`user_id:integer:foreign`)? That's special. It signals that user_id` should receive a foreign constraint. Following conventions, this will give us:
+Notice that "foreign" option (`user_id:integer:foreign`)? That's special. It signals that `user_id` should receive a foreign constraint. Following conventions, this will give us:
 
 ```
 $table->integer('user_id');
