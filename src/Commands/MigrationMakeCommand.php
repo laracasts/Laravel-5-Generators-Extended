@@ -85,6 +85,17 @@ class MigrationMakeCommand extends Command
     }
 
     /**
+     * Handle the console command.
+     * To support Laravel >= 5.5
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        $this->fire();
+    }
+
+    /**
      * Get the application namespace.
      *
      * @return string
