@@ -28,6 +28,12 @@ class SyntaxBuilder
         return compact('up', 'down');
     }
 
+    public function createPivotSchema($schema, $stub)
+    {
+        $up = $this->createSchemaForPivot($schema,$stub);
+        return compact('up');
+    }
+
     /**
      * Create the schema for the "up" method.
      *
@@ -53,6 +59,16 @@ class SyntaxBuilder
 
             return $this->insert($fields)->into($this->getChangeSchemaWrapper());
         }
+
+        // Otherwise, we have no idea how to proceed.
+        throw new GeneratorException;
+    }
+
+    private function createSchemaForPivot($schema,$stub)
+    {
+        $fields = $this->constructSchema($schema);
+
+        return $this->insert($fields)->into($stub);
 
         // Otherwise, we have no idea how to proceed.
         throw new GeneratorException;
