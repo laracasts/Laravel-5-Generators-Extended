@@ -26,7 +26,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
         ]];
 
         $this->create($schema, ['table' => 'posts', 'action' => 'create'])['up']->shouldBe(getStub());
-        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::drop('posts');");
+        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::connection('mysql')->drop('posts');");
     }
 
 }
@@ -34,7 +34,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
 function getStub()
 {
     return <<<EOT
-Schema::create('{{table}}', function (Blueprint \$table) {
+Schema::connection('mysql')->create('{{table}}', function (Blueprint \$table) {
             \$table->increments('id');
             \$table->string('email', 100)->unique()->nullable()->default("foo@example.com");
             \$table->timestamps();
