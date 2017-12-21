@@ -42,6 +42,13 @@ class MigrationMakeCommand extends Command
     protected $meta;
 
     /**
+     * Database name for migration.
+     *
+     * @var string
+     */
+    protected $database_name;
+
+    /**
      * @var Composer
      */
     private $composer;
@@ -79,6 +86,8 @@ class MigrationMakeCommand extends Command
     public function fire()
     {
         $this->meta = (new NameParser)->parse($this->argument('name'));
+        $this->database_name = array_key_exists('database', $this->options()) ? $this->option('database') : 'mysql';
+        $this->meta['database'] = $this->database_name;
 
         $this->makeMigration();
         $this->makeModel();
@@ -220,9 +229,7 @@ class MigrationMakeCommand extends Command
      */
     protected function replaceDatabaseName(&$stub)
     {
-        $database_name = array_key_exists('database', $this->options()) ? $this->option('database') : 'mysql';
-
-        $stub = str_replace('{{database}}', $database_name, $stub);
+        $stub = str_replace('{{database}}', $this->database_name, $stub);
 
         return $this;
     }
