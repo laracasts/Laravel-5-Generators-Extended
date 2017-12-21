@@ -18,7 +18,7 @@ class MigrationMakeCommand extends Command
      *
      * @var string
      */
-    protected $name = 'make:migration:schema {--no-timestamp} {--no-primary-id}';
+    protected $name = 'make:migration:schema';
 
     /**
      * The console command description.
