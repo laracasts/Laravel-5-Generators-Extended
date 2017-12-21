@@ -201,7 +201,7 @@ This option remove $table->timestamps(); from the migration
 
 ##### Remove primary id column
 ```
-php artisan make:migration:schema create_dogs_table --schema="name:string" --no-index-id
+php artisan make:migration:schema create_dogs_table --schema="name:string" --no-primary-id
 ```
 
 This option remove $table->increments('id'); from the migration
