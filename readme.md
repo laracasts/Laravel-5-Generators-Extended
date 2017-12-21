@@ -104,7 +104,7 @@ class CreateUsersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('users', function(Blueprint $table) {
+		Schema::connection('mysql')->create('users', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('username');
 			$table->string('email')->unique();
@@ -119,7 +119,7 @@ class CreateUsersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('users');
+		Schema::connection('mysql')->drop('users');
 	}
 
 }
@@ -151,7 +151,7 @@ class RemoveUserIdFromPostsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('posts', function(Blueprint $table) {
+		Schema::connection('mysql')->table('posts', function(Blueprint $table) {
 			$table->dropColumn('user_id');
 		});
 	}
@@ -163,7 +163,7 @@ class RemoveUserIdFromPostsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('posts', function(Blueprint $table) {
+		Schema::connection('mysql')->table('posts', function(Blueprint $table) {
 			$table->integer('user_id');
 		});
 	}
@@ -174,6 +174,7 @@ class RemoveUserIdFromPostsTable extends Migration {
 Here's a few other examples of commands that you might write:
 
 - `php artisan make:migration:schema create_posts_table`
+- `php artisan make:migration:schema create_posts_table --schema="title:string" --database="other-mysql-connection"`
 - `php artisan make:migration:schema create_posts_table --schema="title:string, body:text, excerpt:string:nullable"`
 - `php artisan make:migration:schema remove_excerpt_from_posts_table --schema="excerpt:string:nullable"`
 
@@ -187,6 +188,22 @@ php artisan make:migration:schema create_dogs_table --schema="name:string"
 
 You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=0` flag/option.
 
+#### Options 
+There are some options to help you.
+
+##### Execute a migration in an different database
+```
+php artisan make:migration:schema create_posts_table --schema="title:string" --database="other-mysql-connection"
+```
+
+Our schema should look like so:
+```
+Schema::connection('other-mysql-connection')->create('posts', function(Blueprint $table) {
+	$table->increments('id');
+	$table->string('title');
+	$table->timestamps();
+);
+```
 #### Foreign Constraints
 
 There's also a secret bit of sugar for when you need to generate foreign constraints. Imagine that you have a posts table, where each post belongs to a user. Let's try:
@@ -205,7 +222,7 @@ $table->foreign('user_id')->references('id')->on('users');
 As such, for that full command, our schema should look like so:
 
 ```
-Schema::create('posts', function(Blueprint $table) {
+Schema::connection('mysql')->create('posts', function(Blueprint $table) {
 	$table->increments('id');
 	$table->integer('user_id');
 	$table->foreign('user_id')->references('id')->on('users');
@@ -242,7 +259,7 @@ class CreatePostTagPivotTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('post_tag', function(Blueprint $table)
+		Schema::connection('mysql')->create('post_tag', function(Blueprint $table)
 		{
 			$table->integer('post_id')->unsigned()->index();
 			$table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
@@ -258,7 +275,7 @@ class CreatePostTagPivotTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('post_tag');
+		Schema::connection('mysql')->drop('post_tag');
 	}
 
 }

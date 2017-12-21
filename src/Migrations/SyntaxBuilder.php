@@ -71,7 +71,7 @@ class SyntaxBuilder
         // If the user created a table, then for the down
         // method, we should drop it.
         if ($meta['action'] == 'create') {
-            return sprintf("Schema::drop('%s');", $meta['table']);
+            return sprintf("Schema::connection('%s')->drop('%s');", $meta['database'], $meta['table']);
         }
 
         // If the user added columns to a table, then for

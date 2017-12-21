@@ -42,6 +42,13 @@ class MigrationMakeCommand extends Command
     protected $meta;
 
     /**
+     * Database name for migration.
+     *
+     * @var string
+     */
+    protected $database_name;
+
+    /**
      * @var Composer
      */
     private $composer;
@@ -79,6 +86,8 @@ class MigrationMakeCommand extends Command
     public function fire()
     {
         $this->meta = (new NameParser)->parse($this->argument('name'));
+        $this->database_name = array_key_exists('database', $this->options()) ? $this->option('database') : 'mysql';
+        $this->meta['database'] = $this->database_name;
 
         $this->makeMigration();
         $this->makeModel();
@@ -176,6 +185,7 @@ class MigrationMakeCommand extends Command
 
         $this->replaceClassName($stub)
             ->replaceSchema($stub)
+            ->replaceDatabaseName($stub)
             ->replaceTableName($stub);
 
         return $stub;
@@ -207,6 +217,19 @@ class MigrationMakeCommand extends Command
         $table = $this->meta['table'];
 
         $stub = str_replace('{{table}}', $table, $stub);
+
+        return $this;
+    }
+
+    /**
+     * Replace the database name in the stub.
+     *
+     * @param  string $stub
+     * @return $this
+     */
+    protected function replaceDatabaseName(&$stub)
+    {
+        $stub = str_replace('{{database}}', $this->database_name, $stub);
 
         return $this;
     }
@@ -262,6 +285,7 @@ class MigrationMakeCommand extends Command
         return [
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
             ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
+            ['database', null, InputOption::VALUE_OPTIONAL, 'Optional database reference', 'mysql'],
         ];
     }
 }
