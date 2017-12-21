@@ -174,6 +174,8 @@ class RemoveUserIdFromPostsTable extends Migration {
 Here's a few other examples of commands that you might write:
 
 - `php artisan make:migration:schema create_posts_table`
+- `php artisan make:migration:schema create_posts_table --no-timestamp`
+- `php artisan make:migration:schema create_posts_table --no-primary-id`
 - `php artisan make:migration:schema create_posts_table --schema="title:string, body:text, excerpt:string:nullable"`
 - `php artisan make:migration:schema remove_excerpt_from_posts_table --schema="excerpt:string:nullable"`
 
@@ -186,6 +188,23 @@ php artisan make:migration:schema create_dogs_table --schema="name:string"
 ```
 
 You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=0` flag/option.
+
+#### Options 
+There are some options to help you.
+
+##### Remove timestamp column
+```
+php artisan make:migration:schema create_dogs_table --schema="name:string" --no-timestamp
+```
+
+This option remove $table->timestamps(); from the migration
+
+##### Remove primary id column
+```
+php artisan make:migration:schema create_dogs_table --schema="name:string" --no-primary-id
+```
+
+This option remove $table->increments('id'); from the migration
 
 #### Foreign Constraints
 
