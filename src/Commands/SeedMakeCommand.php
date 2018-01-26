@@ -30,11 +30,11 @@ class SeedMakeCommand extends GeneratorCommand
     protected $type = 'Seed';
 
     /**
-     * Parse the name and format according to the root namespace.
+     * Get the class name from name input.
      *
      * @return string
      */
-    protected function parseName()
+    protected function getClassName()
     {
         return ucwords(camel_case($this->getNameInput())) . 'TableSeeder';
     }
@@ -59,7 +59,7 @@ class SeedMakeCommand extends GeneratorCommand
     {
         $stub = $this->files->get($this->getStub());
 
-        return $this->replaceClass($stub, $this->parseName());
+        return $this->replaceClass($stub, $this->getClassName());
     }
 
     /**
