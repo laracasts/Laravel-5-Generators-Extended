@@ -4,7 +4,6 @@ namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class PivotMigrationMakeCommand extends GeneratorCommand
 {
@@ -45,8 +44,11 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getClassName()
     {
-        $tables = array_map('str_singular', $this->getSortedTableNames());
-        $name = implode('', array_map('ucwords', $tables));
+        $name = implode('', array_map('ucwords', $this->getSortedTableNames()));
+
+        $name = preg_replace_callback('/(\_)([a-z]{1})/', function ($matches) {
+            return studly_case($matches[0]);
+        }, $name);
 
         return "Create{$name}PivotTable";
     }
@@ -113,7 +115,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
 
         $stub = str_replace(
             ['{{columnOne}}', '{{columnTwo}}', '{{tableOne}}', '{{tableTwo}}'],
-            array_merge(array_map('str_singular', $tables), $tables),
+            $tables,
             $stub
         );
 
@@ -141,7 +143,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getPivotTableName()
     {
-        return implode('_', array_map('str_singular', $this->getSortedTableNames()));
+        return implode('_', $this->getSortedTableNames());
     }
 
     /**
@@ -155,6 +157,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
             strtolower($this->argument('tableOne')),
             strtolower($this->argument('tableTwo'))
         ];
+
+        $tables = array_map('str_singular', $tables);
 
         sort($tables);
 
