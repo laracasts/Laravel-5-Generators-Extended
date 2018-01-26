@@ -39,12 +39,11 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Parse the name and format.
+     * Get the class name from table names.
      *
-     * @param  string $name
      * @return string
      */
-    protected function parseName($name)
+    protected function getClassName()
     {
         $tables = array_map('str_singular', $this->getSortedTableNames());
         $name = implode('', array_map('ucwords', $tables));
@@ -70,8 +69,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getPath($name = null)
     {
-        return base_path() . '/database/migrations/' . date('Y_m_d_His') .
-        '_create_' . $this->getPivotTableName() . '_pivot_table.php';
+        return base_path() . '/database/migrations/' . date('Y_m_d_His') . '_create_' . $this->getPivotTableName() . '_pivot_table.php';
     }
 
     /**
@@ -86,7 +84,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
 
         return $this->replacePivotTableName($stub)
             ->replaceSchema($stub)
-            ->replaceClass($stub, $name);
+            ->replaceClass($stub, $this->getClassName());
     }
 
     /**
@@ -120,12 +118,12 @@ class PivotMigrationMakeCommand extends GeneratorCommand
 
         return $this;
     }
-    
+
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param  string $stub
+     * @param  string $name
      * @return string
      */
     protected function replaceClass($stub, $name)
