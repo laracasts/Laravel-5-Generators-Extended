@@ -19,6 +19,7 @@ class SyntaxBuilder
      * @param  array $schema
      * @param  array $meta
      * @return string
+     * @throws GeneratorException
      */
     public function create($schema, $meta)
     {

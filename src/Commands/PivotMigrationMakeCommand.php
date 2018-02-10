@@ -111,7 +111,10 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function replaceSchema(&$stub)
     {
-        $tables = $this->getSortedTableNames();
+        $tables = array_merge(
+            $this->getSortedTableNames(),
+            $this->getTableNamesFromInput()
+        );
 
         $stub = str_replace(
             ['{{columnOne}}', '{{columnTwo}}', '{{tableOne}}', '{{tableTwo}}'],
@@ -153,16 +156,24 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getSortedTableNames()
     {
-        $tables = [
-            strtolower($this->argument('tableOne')),
-            strtolower($this->argument('tableTwo'))
-        ];
+        $tables = $this->getTableNamesFromInput();
 
         $tables = array_map('str_singular', $tables);
 
         sort($tables);
 
         return $tables;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getTableNamesFromInput()
+    {
+        return [
+            strtolower($this->argument('tableOne')),
+            strtolower($this->argument('tableTwo'))
+        ];
     }
 
     /**
