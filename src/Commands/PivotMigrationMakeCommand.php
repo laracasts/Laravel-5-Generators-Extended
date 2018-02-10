@@ -29,7 +29,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected $type = 'Migration';
 
     /**
-     * Get the desired class name from the input.
+     * Get the first and second table name from input
      *
      * @return string
      */
@@ -44,7 +44,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getClassName()
     {
-        $name = implode('', array_map('ucwords', $this->getSortedTableNames()));
+        $name = implode('', array_map('ucwords', $this->getSortedSingularTableNames()));
 
         $name = preg_replace_callback('/(\_)([a-z]{1})/', function ($matches) {
             return studly_case($matches[0]);
@@ -112,8 +112,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected function replaceSchema(&$stub)
     {
         $tables = array_merge(
-            $this->getSortedTableNames(),
-            $this->getTableNamesFromInput()
+            $this->getSortedSingularTableNames(),
+            $this->getSortedTableNames()
         );
 
         $stub = str_replace(
@@ -146,7 +146,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getPivotTableName()
     {
-        return implode('_', $this->getSortedTableNames());
+        return implode('_', $this->getSortedSingularTableNames());
     }
 
     /**
@@ -158,7 +158,18 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     {
         $tables = $this->getTableNamesFromInput();
 
-        $tables = array_map('str_singular', $tables);
+        sort($tables);
+
+        return $tables;
+    }
+
+    /**
+     * Sort the two tables in alphabetical order, in singular form.
+     * @return array
+     */
+    protected function getSortedSingularTableNames()
+    {
+        $tables = array_map('str_singular', $this->getTableNamesFromInput());
 
         sort($tables);
 
@@ -166,6 +177,8 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Get the table names from input.
+     *
      * @return array
      */
     protected function getTableNamesFromInput()
