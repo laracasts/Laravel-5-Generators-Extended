@@ -28,6 +28,6 @@ class {{class}} extends Migration
      */
     public function down()
     {
-        Schema::drop('{{pivotTableName}}');
+        Schema::dropIfExists('{{pivotTableName}}');
     }
 }

@@ -4,7 +4,6 @@ namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class PivotMigrationMakeCommand extends GeneratorCommand
 {
@@ -30,7 +29,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected $type = 'Migration';
 
     /**
-     * Get the desired class name from the input.
+     * Get the first and second table name from input
      *
      * @return string
      */
@@ -39,15 +38,17 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Parse the name and format.
+     * Get the class name from table names.
      *
-     * @param  string $name
      * @return string
      */
-    protected function parseName($name)
+    protected function getClassName()
     {
-        $tables = array_map('str_singular', $this->getSortedTableNames());
-        $name = implode('', array_map('ucwords', $tables));
+        $name = implode('', array_map('ucwords', $this->getSortedSingularTableNames()));
+
+        $name = preg_replace_callback('/(\_)([a-z]{1})/', function ($matches) {
+            return studly_case($matches[0]);
+        }, $name);
 
         return "Create{$name}PivotTable";
     }
@@ -71,7 +72,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
     protected function getPath($name = null)
     {
         return base_path() . '/database/migrations/' . date('Y_m_d_His') .
-        '_create_' . $this->getPivotTableName() . '_pivot_table.php';
+            '_create_' . $this->getPivotTableName() . '_pivot_table.php';
     }
 
     /**
@@ -86,7 +87,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
 
         return $this->replacePivotTableName($stub)
             ->replaceSchema($stub)
-            ->replaceClass($stub, $name);
+            ->replaceClass($stub, $this->getClassName());
     }
 
     /**
@@ -110,22 +111,25 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function replaceSchema(&$stub)
     {
-        $tables = $this->getSortedTableNames();
+        $tables = array_merge(
+            $this->getSortedSingularTableNames(),
+            $this->getSortedTableNames()
+        );
 
         $stub = str_replace(
             ['{{columnOne}}', '{{columnTwo}}', '{{tableOne}}', '{{tableTwo}}'],
-            array_merge(array_map('str_singular', $tables), $tables),
+            $tables,
             $stub
         );
 
         return $this;
     }
-    
+
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param  string $stub
+     * @param  string $name
      * @return string
      */
     protected function replaceClass($stub, $name)
@@ -142,7 +146,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getPivotTableName()
     {
-        return implode('_', array_map('str_singular', $this->getSortedTableNames()));
+        return implode('_', $this->getSortedSingularTableNames());
     }
 
     /**
@@ -152,14 +156,37 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getSortedTableNames()
     {
-        $tables = [
-            strtolower($this->argument('tableOne')),
-            strtolower($this->argument('tableTwo'))
-        ];
+        $tables = $this->getTableNamesFromInput();
 
         sort($tables);
 
         return $tables;
+    }
+
+    /**
+     * Sort the two tables in alphabetical order, in singular form.
+     * @return array
+     */
+    protected function getSortedSingularTableNames()
+    {
+        $tables = array_map('str_singular', $this->getTableNamesFromInput());
+
+        sort($tables);
+
+        return $tables;
+    }
+
+    /**
+     * Get the table names from input.
+     *
+     * @return array
+     */
+    protected function getTableNamesFromInput()
+    {
+        return [
+            strtolower($this->argument('tableOne')),
+            strtolower($this->argument('tableTwo'))
+        ];
     }
 
     /**

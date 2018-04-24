@@ -19,6 +19,7 @@ class SyntaxBuilder
      * @param  array $schema
      * @param  array $meta
      * @return string
+     * @throws GeneratorException
      */
     public function create($schema, $meta)
     {
@@ -71,7 +72,7 @@ class SyntaxBuilder
         // If the user created a table, then for the down
         // method, we should drop it.
         if ($meta['action'] == 'create') {
-            return sprintf("Schema::drop('%s');", $meta['table']);
+            return sprintf("Schema::dropIfExists('%s');", $meta['table']);
         }
 
         // If the user added columns to a table, then for
