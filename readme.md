@@ -192,13 +192,13 @@ You'll get a migration, populated with the schema...but you'll also get an Eloqu
 There's also a secret bit of sugar for when you need to generate foreign constraints. Imagine that you have a posts table, where each post belongs to a user. Let's try:
 
 ```
-php artisan make:migration:schema create_posts_table --schema="user_id:integer:foreign, title:string, body:text"
+php artisan make:migration:schema create_posts_table --schema="user_id:unsignedInteger:foreign, title:string, body:text"
 ```
 
-Notice that "foreign" option (`user_id:integer:foreign`)? That's special. It signals that `user_id` should receive a foreign constraint. Following conventions, this will give us:
+Notice that "foreign" option (`user_id:unsignedInteger:foreign`)? That's special. It signals that `user_id` should receive a foreign constraint. Following conventions, this will give us:
 
 ```
-$table->integer('user_id');
+$table->unsignedInteger('user_id');
 $table->foreign('user_id')->references('id')->on('users');
 ```
 
@@ -207,7 +207,7 @@ As such, for that full command, our schema should look like so:
 ```
 Schema::create('posts', function(Blueprint $table) {
 	$table->increments('id');
-	$table->integer('user_id');
+	$table->unsignedInteger('user_id');
 	$table->foreign('user_id')->references('id')->on('users');
 	$table->string('title');
 	$table->text('body');
