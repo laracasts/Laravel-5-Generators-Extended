@@ -12,6 +12,18 @@ L5&L6 include a bunch of generators out of the box, so this package only needs t
 
 *With one or two more to come.*
 
+  * [Usage on Laravel 5.5 to 6](#usage-on-laravel-55-to-6)
+    + [Step 1: Install Through Composer](#step-1--install-through-composer)
+    + [Step 2: Run Artisan!](#step-2--run-artisan-)
+  * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
+    + [Step 1: Install Through Composer](#step-1--install-through-composer-1)
+    + [Step 2: Add the Service Provider](#step-2--add-the-service-provider)
+    + [Step 3: Run Artisan!](#step-3--run-artisan-)
+  * [Examples](#examples)
+    + [Migrations With Schema](#migrations-with-schema)
+      - [Foreign Constraints](#foreign-constraints)
+    + [Pivot Tables](#pivot-tables)
+    + [Database Seeders](#database-seeders)
 
 ## Usage on Laravel 5.5 to 6
 
