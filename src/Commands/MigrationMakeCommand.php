@@ -119,15 +119,17 @@ class MigrationMakeCommand extends Command
      */
     protected function makeModel()
     {
-        $modelPath = $this->getModelPath($this->getModelName());
-
-        if ($this->option('model') && !$this->files->exists($modelPath)) {
-            $this->call('make:model', [
-                'name' => $this->getModelName()
-            ]);
+        if ($this->option('model')) {
+            $modelPath = $this->getModelPath($this->option('model'));
+            
+            if (!$this->files->exists($modelPath)) {
+                $this->call('make:model', [
+                    'name' => $modelPath
+                ]);
+            }
         }
     }
-
+    
     /**
      * Build the directory for the class if necessary.
      *
@@ -228,16 +230,6 @@ class MigrationMakeCommand extends Command
         $stub = str_replace(['{{schema_up}}', '{{schema_down}}'], $schema, $stub);
 
         return $this;
-    }
-
-    /**
-     * Get the class name for the Eloquent model generator.
-     *
-     * @return string
-     */
-    protected function getModelName()
-    {
-        return ucwords(str_singular(camel_case($this->meta['table'])));
     }
 
     /**
