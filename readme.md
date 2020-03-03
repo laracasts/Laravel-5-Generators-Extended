@@ -1,10 +1,10 @@
-# Laravel 5 & 6 Extended Generators
+# Extended Generators for Laravel 5, 6 and 7
 
 [![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
 
 If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5 & 6.
 
-L5&L6 include a bunch of generators out of the box, so this package only needs to add a few things, like:
+Laravel includes a bunch of generators out of the box, so this package only needs to add a few things, like:
 
 - `make:migration:schema`
 - `make:migration:pivot`
@@ -12,7 +12,7 @@ L5&L6 include a bunch of generators out of the box, so this package only needs t
 
 *With one or two more to come.*
 
-  * [Usage on Laravel 5.5 to 6](#usage-on-laravel-55-to-6)
+  * [Usage on Laravel 5.5 to 7](#usage-on-laravel-55-to-7)
     + [Step 1: Install Through Composer](#step-1--install-through-composer)
     + [Step 2: Run Artisan!](#step-2--run-artisan-)
   * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
@@ -25,7 +25,7 @@ L5&L6 include a bunch of generators out of the box, so this package only needs t
     + [Pivot Tables](#pivot-tables)
     + [Database Seeders](#database-seeders)
 
-## Usage on Laravel 5.5 to 6
+## Usage on Laravel 5.5 to 7
 
 ### Step 1: Install Through Composer
 
