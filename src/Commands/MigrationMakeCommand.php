@@ -5,6 +5,7 @@ namespace Laracasts\Generators\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 use Laracasts\Generators\Migrations\NameParser;
 use Laracasts\Generators\Migrations\SchemaParser;
 use Laracasts\Generators\Migrations\SyntaxBuilder;
@@ -189,7 +190,7 @@ class MigrationMakeCommand extends Command
      */
     protected function replaceClassName(&$stub)
     {
-        $className = ucwords(camel_case($this->argument('name')));
+        $className = ucwords(Str::camel($this->argument('name')));
 
         $stub = str_replace('{{class}}', $className, $stub);
 
@@ -237,7 +238,7 @@ class MigrationMakeCommand extends Command
      */
     protected function getModelName()
     {
-        return ucwords(str_singular(camel_case($this->meta['table'])));
+        return ucwords(Str::singular(Str::camel($this->meta['table'])));
     }
 
     /**
