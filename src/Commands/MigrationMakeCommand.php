@@ -83,6 +83,8 @@ class MigrationMakeCommand extends Command
 
         $this->makeMigration();
         $this->makeModel();
+        
+        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -111,8 +113,6 @@ class MigrationMakeCommand extends Command
         $this->files->put($path, $this->compileMigrationStub());
 
         $this->info('Migration created successfully.');
-
-        $this->composer->dumpAutoloads();
     }
 
     /**
