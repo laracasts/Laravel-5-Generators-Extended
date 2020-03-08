@@ -2,6 +2,7 @@
 
 namespace Laracasts\Generators\Commands;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -29,14 +30,13 @@ class SeedMakeCommand extends GeneratorCommand
     protected $type = 'Seed';
 
     /**
-     * Parse the name and format according to the root namespace.
+     * Get the class name from name input.
      *
-     * @param  string $name
      * @return string
      */
-    protected function parseName($name)
+    protected function getClassName()
     {
-        return ucwords(camel_case($name)) . 'TableSeeder';
+        return ucwords(camel_case($this->getNameInput())) . 'TableSeeder';
     }
 
     /**
@@ -59,7 +59,7 @@ class SeedMakeCommand extends GeneratorCommand
     {
         $stub = $this->files->get($this->getStub());
 
-        return $this->replaceClass($stub, $name);
+        return $this->replaceClass($stub, $this->getClassName());
     }
 
     /**
@@ -71,7 +71,9 @@ class SeedMakeCommand extends GeneratorCommand
      */
     protected function replaceClass($stub, $name)
     {
-        $stub = str_replace('{{class}}', $name, $stub);
+        $class = str_replace($this->getNamespace($name).'\\', '', $name);
+
+        $stub = str_replace('{{class}}', $class, $stub);
 
         return $stub;
     }
@@ -84,6 +86,8 @@ class SeedMakeCommand extends GeneratorCommand
      */
     protected function getPath($name)
     {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
         return base_path() . '/database/seeds/' . str_replace('\\', '/', $name) . '.php';
     }
 }

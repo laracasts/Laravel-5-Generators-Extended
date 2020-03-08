@@ -3,7 +3,6 @@
 namespace spec\Laracasts\Generators\Migrations;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class SyntaxBuilderSpec extends ObjectBehavior
 {
@@ -26,7 +25,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
         ]];
 
         $this->create($schema, ['table' => 'posts', 'action' => 'create'])['up']->shouldBe(getStub());
-        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::drop('posts');");
+        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::dropIfExists('posts');");
     }
 
 }
