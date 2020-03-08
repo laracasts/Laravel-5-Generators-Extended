@@ -3,7 +3,6 @@
 namespace spec\Laracasts\Generators\Migrations;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class SyntaxBuilderSpec extends ObjectBehavior
 {
@@ -26,7 +25,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
         ]];
 
         $this->create($schema, ['table' => 'posts', 'action' => 'create'])['up']->shouldBe(getStub());
-        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::drop('posts');");
+        $this->create($schema, ['table' => 'posts', 'action' => 'create'])['down']->shouldBe("Schema::dropIfExists('posts');");
     }
 
     function it_doesnt_add_duplicate_id_field()
@@ -69,7 +68,7 @@ class SyntaxBuilderSpec extends ObjectBehavior
 function getStub()
 {
     return <<<EOT
-Schema::create('{{table}}', function(Blueprint \$table) {
+Schema::create('{{table}}', function (Blueprint \$table) {
             \$table->increments('id');
             \$table->string('email', 100)->unique()->nullable()->default("foo@example.com");
             \$table->timestamps();

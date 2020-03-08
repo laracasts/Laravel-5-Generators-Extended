@@ -2,10 +2,10 @@
 
 namespace Laracasts\Generators\Commands;
 
-use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Console\Command;
+use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Composer;
+use Illuminate\Support\Str;
 use Laracasts\Generators\Migrations\NameParser;
 use Laracasts\Generators\Migrations\SchemaParser;
 use Laracasts\Generators\Migrations\SyntaxBuilder;
@@ -14,8 +14,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class MigrationMakeCommand extends Command
 {
-    use AppNamespaceDetectorTrait;
-
     /**
      * The console command name.
      *
@@ -28,7 +26,7 @@ class MigrationMakeCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Create a new migration class, and apply schema at the same time';
+    protected $description = 'Create a new migration class and apply schema at the same time';
 
     /**
      * The filesystem instance.
@@ -53,15 +51,25 @@ class MigrationMakeCommand extends Command
      * Create a new command instance.
      *
      * @param Filesystem $files
-     * @param NameParser $parser
      * @param Composer $composer
      */
-    public function __construct(Filesystem $files, Composer $composer)
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
 
         $this->files = $files;
-        $this->composer = $composer;
+        $this->composer = app()['composer'];
+    }
+
+    /**
+     * Alias for the fire method.
+     *
+     * In Laravel 5.5 the fire() method has been renamed to handle().
+     * This alias provides support for both Laravel 5.4 and 5.5.
+     */
+    public function handle()
+    {
+        $this->fire();
     }
 
     /**
@@ -75,6 +83,16 @@ class MigrationMakeCommand extends Command
 
         $this->makeMigration();
         $this->makeModel();
+    }
+
+    /**
+     * Get the application namespace.
+     *
+     * @return string
+     */
+    protected function getAppNamespace()
+    {
+        return Container::getInstance()->getNamespace();
     }
 
     /**
@@ -132,7 +150,7 @@ class MigrationMakeCommand extends Command
      */
     protected function getPath($name)
     {
-        return './database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
+        return base_path() . '/database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
     }
 
     /**
@@ -172,7 +190,7 @@ class MigrationMakeCommand extends Command
      */
     protected function replaceClassName(&$stub)
     {
-        $className = ucwords(camel_case($this->argument('name')));
+        $className = ucwords(Str::camel($this->argument('name')));
 
         $stub = str_replace('{{class}}', $className, $stub);
 
@@ -220,7 +238,7 @@ class MigrationMakeCommand extends Command
      */
     protected function getModelName()
     {
-        return ucwords(str_singular(camel_case($this->meta['table'])));
+        return ucwords(Str::singular(Str::camel($this->meta['table'])));
     }
 
     /**

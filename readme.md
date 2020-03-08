@@ -1,10 +1,10 @@
-# Laravel 5 Extended Generators
+# Extended Generators for Laravel 5, 6 and 7
 
 [![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
 
-If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5.
+If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5 & 6.
 
-L5 includes a bunch of generators out of the box, so this package only needs to add a few things, like:
+Laravel includes a bunch of generators out of the box, so this package only needs to add a few things, like:
 
 - `make:migration:schema`
 - `make:migration:pivot`
@@ -12,7 +12,33 @@ L5 includes a bunch of generators out of the box, so this package only needs to 
 
 *With one or two more to come.*
 
-## Usage
+  * [Usage on Laravel 5.5 to 7](#usage-on-laravel-55-to-7)
+    + [Step 1: Install Through Composer](#step-1--install-through-composer)
+    + [Step 2: Run Artisan!](#step-2--run-artisan-)
+  * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
+    + [Step 1: Install Through Composer](#step-1--install-through-composer-1)
+    + [Step 2: Add the Service Provider](#step-2--add-the-service-provider)
+    + [Step 3: Run Artisan!](#step-3--run-artisan-)
+  * [Examples](#examples)
+    + [Migrations With Schema](#migrations-with-schema)
+      - [Foreign Constraints](#foreign-constraints)
+    + [Pivot Tables](#pivot-tables)
+    + [Database Seeders](#database-seeders)
+
+## Usage on Laravel 5.5 to 7
+
+### Step 1: Install Through Composer
+
+```
+composer require laracasts/generators --dev
+```
+
+### Step 2: Run Artisan!
+
+You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
+
+
+## Usage on Laravel 5.4 and 5.3
 
 ### Step 1: Install Through Composer
 
@@ -171,20 +197,20 @@ This means, if you run, say:
 php artisan make:migration:schema create_dogs_table --schema="name:string"
 ```
 
-You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=false` flag/option.
+You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=0` flag/option.
 
 #### Foreign Constraints
 
 There's also a secret bit of sugar for when you need to generate foreign constraints. Imagine that you have a posts table, where each post belongs to a user. Let's try:
 
 ```
-php artisan make:migration:schema create_posts_table --schema="user_id:integer:foreign, title:string, body:text"
+php artisan make:migration:schema create_posts_table --schema="user_id:unsignedInteger:foreign, title:string, body:text"
 ```
 
-Notice that "foreign" option (`user_id:integer:foreign`)? That's special. It signals that user_id` should receive a foreign constraint. Following conventions, this will give us:
+Notice that "foreign" option (`user_id:unsignedInteger:foreign`)? That's special. It signals that `user_id` should receive a foreign constraint. Following conventions, this will give us:
 
 ```
-$table->integer('user_id');
+$table->unsignedInteger('user_id');
 $table->foreign('user_id')->references('id')->on('users');
 ```
 
@@ -193,7 +219,7 @@ As such, for that full command, our schema should look like so:
 ```
 Schema::create('posts', function(Blueprint $table) {
 	$table->increments('id');
-	$table->integer('user_id');
+	$table->unsignedInteger('user_id');
 	$table->foreign('user_id')->references('id')->on('users');
 	$table->string('title');
 	$table->text('body');
@@ -228,8 +254,7 @@ class CreatePostTagPivotTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('post_tag', function(Blueprint $table)
-		{
+		Schema::create('post_tag', function(Blueprint $table) {
 			$table->integer('post_id')->unsigned()->index();
 			$table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
 			$table->integer('tag_id')->unsigned()->index();
