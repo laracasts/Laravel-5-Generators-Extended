@@ -197,7 +197,7 @@ This means, if you run, say:
 php artisan make:migration:schema create_dogs_table --schema="name:string"
 ```
 
-You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=0` flag/option.
+You'll get a migration, populated with the schema... and if you pass ```--model=true``` you'll also get an Eloquent model at `app/Dog.php`.
 
 #### Foreign Constraints
 
