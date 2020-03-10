@@ -3,6 +3,7 @@
 namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PivotMigrationMakeCommand extends GeneratorCommand
@@ -169,7 +170,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getSortedSingularTableNames()
     {
-        $tables = array_map('str_singular', $this->getTableNamesFromInput());
+        $tables = array_map('Str::singular', $this->getTableNamesFromInput());
 
         sort($tables);
 
