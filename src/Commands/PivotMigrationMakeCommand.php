@@ -48,7 +48,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
         $name = implode('', array_map('ucwords', $this->getSortedSingularTableNames()));
 
         $name = preg_replace_callback('/(\_)([a-z]{1})/', function ($matches) {
-            return studly_case($matches[0]);
+            return Str::studly($matches[0]);
         }, $name);
 
         return "Create{$name}PivotTable";

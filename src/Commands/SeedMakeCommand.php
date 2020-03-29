@@ -36,7 +36,7 @@ class SeedMakeCommand extends GeneratorCommand
      */
     protected function getClassName()
     {
-        return ucwords(camel_case($this->getNameInput())) . 'TableSeeder';
+        return ucwords(Str::camel($this->getNameInput())) . 'TableSeeder';
     }
 
     /**
