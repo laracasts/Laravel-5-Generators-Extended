@@ -76,7 +76,7 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 php artisan make:migration:schema create_users_table --schema="username:string, email:string:unique"
 ```
 
-Notice the format that we use, when declaring any applicable schema: a comma-separate list...
+Notice the format that we use, when declaring any applicable schema: a comma-separated list...
 
 ```
 COLUMN_NAME:COLUMN_TYPE

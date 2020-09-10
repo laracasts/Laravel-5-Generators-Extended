@@ -1,0 +1,42 @@
+name: Release Drafter
+uses: release-drafter/release-drafter@v5.11.0
+
+on:
+  push:
+    # branches to consider in the event; optional, defaults to all
+    branches:
+      - master
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+name-template: '$NEXT_PATCH_VERSION 🌈'
+tag-template: '$NEXT_PATCH_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+      - 'added'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'fixed'
+  - title: '⚙️ Changes'
+    labels:
+      - 'changed'
+      - 'dependencies'
+  - title: '🧰 Removed'
+    label: 'removed'
+change-template: '- $TITLE (#$NUMBER - thanks to @$AUTHOR)'
+template: |
+  ## Changes
+  $CHANGES

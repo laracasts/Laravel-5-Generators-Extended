@@ -3,7 +3,18 @@
 - Laravel-5-Generators-Extended Version:
 - Command:
 
-### Description:
+### What I did
 
+??
 
-### Steps To Reproduce:
+### What I expected to happen
+
+??
+
+### What happened
+
+??
+
+### What I've already tried to fix it
+
+??
