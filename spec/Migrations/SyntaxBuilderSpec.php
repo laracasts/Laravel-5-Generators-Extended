@@ -34,7 +34,7 @@ function getStub()
 {
     return <<<EOT
 Schema::create('{{table}}', function (Blueprint \$table) {
-            \$table->increments('id');
+            \$table->bigIncrements('id');
             \$table->string('email', 100)->unique()->nullable()->default("foo@example.com");
             \$table->timestamps();
         });
