@@ -6,7 +6,7 @@ Easily define the migration schema right in your `make:migration` command. The n
 - `make:migration:schema`
 - `make:migration:pivot`
 
-Which allows you to do `php artisan make:migration:schema create_dogs_table --schema="name:string:nullable,description:text,age:integer,email:string:unique"` and get a full migration that you can run using `php artisan migrate`. For simple cases like this one, no need to tinker inside the migration file itself. And if you do need to change anything, it's easier because the bulk of the code has already been generated.
+Which allows you to do `php artisan make:migration:schema create_dogs_table --schema="name:string:nullable, description:text, age:integer, email:string:unique"` and get a full migration that you can run using `php artisan migrate`. For simple cases like this one, no need to tinker inside the migration file itself. And if you do need to change anything, it's easier because the bulk of the code has already been generated.
 
 Created in 2015 by [Jeffrey Way](https://github.com/jeffreyway) as a natural progression of his [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators) package, to provide the same features for Laravel 5. Since 2017 it's been maintained by the [Backpack for Laravel](https://github.com/laravel-backpack/crud) team, with features and fixes added by community members like you. So feel free to pitch in.
 
