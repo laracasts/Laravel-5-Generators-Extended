@@ -7,6 +7,10 @@
     {
       "name": "Jeffrey Way",
       "email": "jeffrey@laracasts.com"
+    },
+    {
+      "name": "Cristian Tabacitu",
+      "email": "hello@tabaciu.ro"
     }
   ],
   "require": {
