@@ -23,21 +23,8 @@ class GeneratorsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerSeedGenerator();
         $this->registerMigrationGenerator();
         $this->registerPivotMigrationGenerator();
-    }
-
-    /**
-     * Register the make:seed generator.
-     */
-    private function registerSeedGenerator()
-    {
-        $this->app->singleton('command.laracasts.seed', function ($app) {
-            return $app['Laracasts\Generators\Commands\SeedMakeCommand'];
-        });
-
-        $this->commands('command.laracasts.seed');
     }
 
     /**

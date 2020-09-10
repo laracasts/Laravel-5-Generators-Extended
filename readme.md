@@ -1,18 +1,21 @@
-# Extended Generators for Laravel 5, 6 and 7
+# Extended Generators for Laravel 6, 7 and 8
 
 [![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
 
-If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5 & 6.
-
-Laravel includes a bunch of generators out of the box, so this package only needs to add a few things, like:
-
+Easily define the migration schema right in your `make:migration` command. The new commands this package provides are:
 - `make:migration:schema`
 - `make:migration:pivot`
-- `make:seed`
 
-*With one or two more to come.*
+Which allows you to do `php artisan make:migration:schema create_dogs_table --schema="name:string:nullable,description:text,age:integer,email:string:unique"` and get a full migration that you can run using `php artisan migrate`. For simple cases like this one, no need to tinker inside the migration file itself. And if you do need to change anything, it's easier because the bulk of the code has already been generated.
 
-  * [Usage on Laravel 5.5 to 7](#usage-on-laravel-55-to-7)
+Depending on your Laravel version you should use:
+- for Laravel 4 - use [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators)
+- for Laravel 5.0 - 5.8 - use `v1` of this package;
+- for Laravel 6-8 - use `v2` of this package;
+
+## Table of Contents
+
+  * [Usage on Laravel 5.5 to 8](#usage-on-laravel-55-to-7)
     + [Step 1: Install Through Composer](#step-1--install-through-composer)
     + [Step 2: Run Artisan!](#step-2--run-artisan-)
   * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
@@ -23,7 +26,6 @@ Laravel includes a bunch of generators out of the box, so this package only need
     + [Migrations With Schema](#migrations-with-schema)
       - [Foreign Constraints](#foreign-constraints)
     + [Pivot Tables](#pivot-tables)
-    + [Database Seeders](#database-seeders)
 
 ## Usage on Laravel 5.5 to 7
 
@@ -280,29 +282,3 @@ class CreatePostTagPivotTable extends Migration {
 ```
 
 > Notice that the naming conventions are being followed here, regardless of what order you pass the table names.
-
-### Database Seeders
-
-```
-php artisan make:seed posts
-```
-
-This one is fairly basic. It just gives you a quick seeder class in the "database/seeds" folder.
-
-```php
-<?php
-
-use Illuminate\Database\Seeder;
-
-// composer require laracasts/testdummy
-use Laracasts\TestDummy\Factory as TestDummy;
-
-class PostsTableSeeder extends Seeder {
-
-	public function run()
-	{
-        // TestDummy::times(20)->create('App\Post');
-	}
-
-}
-```
