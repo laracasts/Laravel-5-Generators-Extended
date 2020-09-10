@@ -1,8 +1,8 @@
-# Extended Generators for Laravel 5, 6 and 7
+# Extended Migration Generators for Laravel 5 to 8
 
 [![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
 
-If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5 & 6.
+If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5. Then support for Laravel 6, 7 and 8 has been added, thanks to the [Backpack for Laravel](https://github.com/laravel-backpack/crud) team.
 
 Laravel includes a bunch of generators out of the box, so this package only needs to add a few things, like:
 
@@ -12,7 +12,7 @@ Laravel includes a bunch of generators out of the box, so this package only need
 
 *With one or two more to come.*
 
-  * [Usage on Laravel 5.5 to 7](#usage-on-laravel-55-to-7)
+  * [Usage on Laravel 5.5 to 8](#usage-on-laravel-55-to-8)
     + [Step 1: Install Through Composer](#step-1--install-through-composer)
     + [Step 2: Run Artisan!](#step-2--run-artisan-)
   * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
@@ -25,7 +25,7 @@ Laravel includes a bunch of generators out of the box, so this package only need
     + [Pivot Tables](#pivot-tables)
     + [Database Seeders](#database-seeders)
 
-## Usage on Laravel 5.5 to 7
+## Usage on Laravel 5.5 to 8
 
 ### Step 1: Install Through Composer
 
