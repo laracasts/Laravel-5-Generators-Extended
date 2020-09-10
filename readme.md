@@ -10,61 +10,27 @@ Which allows you to do `php artisan make:migration:schema create_dogs_table --sc
 
 Depending on your Laravel version you should use:
 - for Laravel 4 - use [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators)
-- for Laravel 5.0 - 5.8 - use `v1` of this package;
-- for Laravel 6-8 - use `v2` of this package;
+- for Laravel 5.0 - 5.8 - use [`v1` of this package](https://github.com/laracasts/Laravel-5-Generators-Extended/tree/v1);
+- for Laravel 6-8 - use `v2` of this package (latest);
 
 ## Table of Contents
 
-  * [Usage on Laravel 5.5 to 8](#usage-on-laravel-55-to-7)
-    + [Step 1: Install Through Composer](#step-1--install-through-composer)
-    + [Step 2: Run Artisan!](#step-2--run-artisan-)
-  * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
-    + [Step 1: Install Through Composer](#step-1--install-through-composer-1)
-    + [Step 2: Add the Service Provider](#step-2--add-the-service-provider)
-    + [Step 3: Run Artisan!](#step-3--run-artisan-)
+  * [Installation](#installation)
   * [Examples](#examples)
     + [Migrations With Schema](#migrations-with-schema)
       - [Foreign Constraints](#foreign-constraints)
     + [Pivot Tables](#pivot-tables)
 
-## Usage on Laravel 5.5 to 7
+## Installation
 
-### Step 1: Install Through Composer
-
-```
-composer require laracasts/generators --dev
-```
-
-### Step 2: Run Artisan!
-
-You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
-
-
-## Usage on Laravel 5.4 and 5.3
-
-### Step 1: Install Through Composer
+You can install v2 of this project using composer, the service provider will be automatically loaded by Laravel itself:
 
 ```
 composer require laracasts/generators --dev
 ```
 
-### Step 2: Add the Service Provider
-
-You'll only want to use these generators for local development, so you don't want to update the production  `providers` array in `config/app.php`. Instead, add the provider in `app/Providers/AppServiceProvider.php`, like so:
-
-```php
-public function register()
-{
-	if ($this->app->environment() == 'local') {
-		$this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
-	}
-}
-```
-
-
-### Step 3: Run Artisan!
-
 You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
+
 
 ## Examples
 
@@ -205,6 +171,7 @@ If you wish to specify a different path for your migration file, you can use the
 ```
 php artisan make:migration:schema create_dogs_table --path=\database\migrations\pets
 ```
+
 #### Foreign Constraints
 
 There's also a secret bit of sugar for when you need to generate foreign constraints. Imagine that you have a posts table, where each post belongs to a user. Let's try:
