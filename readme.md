@@ -10,6 +10,8 @@ Which allows you to do `php artisan make:migration:schema create_dogs_table --sc
 
 Created in 2015 by [Jeffrey Way](https://github.com/jeffreyway) as a natural progression of his [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators) package, to provide the same features for Laravel 5. Since 2017 it's been maintained by the [Backpack for Laravel](https://github.com/laravel-backpack/crud) team, with features and fixes added by community members like you. So feel free to pitch in.
 
+![https://user-images.githubusercontent.com/1032474/92732702-cd8b3700-f344-11ea-8e3b-ae86501d66fe.gif](https://user-images.githubusercontent.com/1032474/92732702-cd8b3700-f344-11ea-8e3b-ae86501d66fe.gif)
+
 ## Table of Contents
 
   * [Versions](#versions)
