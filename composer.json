@@ -17,12 +17,15 @@
     "illuminate/support": "~6.0|~7.0|~8.0"
   },
   "require-dev": {
-    "phpspec/phpspec": "~2.1"
+    "phpspec/phpspec": "~6.0"
   },
   "autoload": {
     "psr-4": {
       "Laracasts\\Generators\\": "src/"
     }
+  },
+  "scripts": {
+      "test": "vendor/bin/phpspec run"
   },
   "extra": {
       "laravel": {
