@@ -1,4 +1,4 @@
-# Extended Generators for Laravel 6, 7 and 8
+# Extended Migration Generators for Laravel 6, 7 and 8
 
 [![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
 
@@ -8,25 +8,28 @@ Easily define the migration schema right in your `make:migration` command. The n
 
 Which allows you to do `php artisan make:migration:schema create_dogs_table --schema="name:string:nullable,description:text,age:integer,email:string:unique"` and get a full migration that you can run using `php artisan migrate`. For simple cases like this one, no need to tinker inside the migration file itself. And if you do need to change anything, it's easier because the bulk of the code has already been generated.
 
-Depending on your Laravel version you should use:
-- for Laravel 4 - use [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators)
-- for Laravel 5.0 - 5.8 - use [`v1` of this package](https://github.com/laracasts/Laravel-5-Generators-Extended/tree/v1);
-- for Laravel 6-8 - use `v2` of this package (latest);
-
 ## Table of Contents
 
+  * [Versions](#versions)
   * [Installation](#installation)
   * [Examples](#examples)
     + [Migrations With Schema](#migrations-with-schema)
       - [Foreign Constraints](#foreign-constraints)
     + [Pivot Tables](#pivot-tables)
 
+## Versions
+
+Depending on your Laravel version, you should:
+- use [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators) for Laravel 4;
+- use [`v1` of this package](https://github.com/laracasts/Laravel-5-Generators-Extended/tree/v1) for Laravel 5.0 - 5.8;
+- use `v2` of this package for Laravel 6-8;
+
 ## Installation
 
 You can install v2 of this project using composer, the service provider will be automatically loaded by Laravel itself:
 
 ```
-composer require laracasts/generators --dev
+composer require --dev laracasts/generators
 ```
 
 You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
@@ -36,7 +39,6 @@ You're all set. Run `php artisan` from the console, and you'll see the new comma
 
 - [Migrations With Schema](#migrations-with-schema)
 - [Pivot Tables](#pivot-tables)
-- [Database Seeders](#database-seeders)
 
 ### Migrations With Schema
 
