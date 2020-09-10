@@ -1,6 +1,9 @@
 # Extended Migration Generators for Laravel 6, 7 and 8
 
-[![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
+<a href="https://packagist.org/packages/laracasts/generators" title="Latest Version on Packagist"><img src="https://img.shields.io/packagist/v/laracasts/generators.svg?style=flat-square"></a>
+<a href="https://packagist.org/packages/laracasts/generators" title="Total Downloads"><img src="https://img.shields.io/packagist/dt/laracasts/generators.svg?style=flat-square"></a>
+<a href="https://travis-ci.org/laracasts/Laravel-5-Generators-Extended" title="Build Status"><img src="https://img.shields.io/travis/laracasts/Laravel-5-Generators-Extended/master.svg?style=flat-square"></a>
+<a href="LICENSE.md" title="MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square"></a>
 
 Easily define the migration schema right in your `make:migration` command. The new commands this package provides are:
 - `make:migration:schema`
