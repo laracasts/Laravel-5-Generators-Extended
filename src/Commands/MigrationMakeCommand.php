@@ -83,6 +83,8 @@ class MigrationMakeCommand extends Command
 
         $this->makeMigration();
         $this->makeModel();
+        
+        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -110,9 +112,8 @@ class MigrationMakeCommand extends Command
 
         $this->files->put($path, $this->compileMigrationStub());
 
-        $this->info('Migration created successfully.');
-
-        $this->composer->dumpAutoloads();
+        $filename = pathinfo($path, PATHINFO_FILENAME);
+        $this->line("<info>Created Migration:</info> {$filename}");
     }
 
     /**
@@ -150,7 +151,11 @@ class MigrationMakeCommand extends Command
      */
     protected function getPath($name)
     {
-        return base_path() . '/database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
+        $path = ($this->option('path'))
+            ? base_path().$this->option('path').'/'.date('Y_m_d_His').'_'.$name.'.php'
+            : base_path().'/database/migrations/'.date('Y_m_d_His').'_'.$name.'.php';
+
+        return $path;
     }
 
     /**
@@ -262,7 +267,8 @@ class MigrationMakeCommand extends Command
     {
         return [
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
-            ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', true],
+            ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', false],
+            ['path', null, InputOption::VALUE_OPTIONAL, 'Optional path for a migration.', false],
         ];
     }
 }

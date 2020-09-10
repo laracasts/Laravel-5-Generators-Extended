@@ -1,74 +1,48 @@
-# Extended Migration Generators for Laravel 5 to 8
+# Extended Migration Generators for Laravel 6, 7 and 8
 
 [![Build Status](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended.svg?branch=master)](https://travis-ci.org/laracasts/Laravel-5-Generators-Extended)
 
-If you're familiar with my [Laravel 4 Generators](https://github.com/JeffreyWay/Laravel-4-Generators), then this is basically the same thing - just upgraded for Laravel 5. Then support for Laravel 6, 7 and 8 has been added, thanks to the [Backpack for Laravel](https://github.com/laravel-backpack/crud) team.
-
-Laravel includes a bunch of generators out of the box, so this package only needs to add a few things, like:
-
+Easily define the migration schema right in your `make:migration` command. The new commands this package provides are:
 - `make:migration:schema`
 - `make:migration:pivot`
-- `make:seed`
 
-*With one or two more to come.*
+Which allows you to do `php artisan make:migration:schema create_dogs_table --schema="name:string:nullable, description:text, age:integer, email:string:unique"` and get a full migration that you can run using `php artisan migrate`. For simple cases like this one, no need to tinker inside the migration file itself. And if you do need to change anything, it's easier because the bulk of the code has already been generated.
 
-  * [Usage on Laravel 5.5 to 8](#usage-on-laravel-55-to-8)
-    + [Step 1: Install Through Composer](#step-1--install-through-composer)
-    + [Step 2: Run Artisan!](#step-2--run-artisan-)
-  * [Usage on Laravel 5.4 and 5.3](#usage-on-laravel-54-and-53)
-    + [Step 1: Install Through Composer](#step-1--install-through-composer-1)
-    + [Step 2: Add the Service Provider](#step-2--add-the-service-provider)
-    + [Step 3: Run Artisan!](#step-3--run-artisan-)
+Created in 2015 by [Jeffrey Way](https://github.com/jeffreyway) as a natural progression of his [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators) package, to provide the same features for Laravel 5. Since 2017 it's been maintained by the [Backpack for Laravel](https://github.com/laravel-backpack/crud) team, with features and fixes added by community members like you. So feel free to pitch in.
+
+![https://user-images.githubusercontent.com/1032474/92732702-cd8b3700-f344-11ea-8e3b-ae86501d66fe.gif](https://user-images.githubusercontent.com/1032474/92732702-cd8b3700-f344-11ea-8e3b-ae86501d66fe.gif)
+
+## Table of Contents
+
+  * [Versions](#versions)
+  * [Installation](#installation)
   * [Examples](#examples)
     + [Migrations With Schema](#migrations-with-schema)
       - [Foreign Constraints](#foreign-constraints)
     + [Pivot Tables](#pivot-tables)
-    + [Database Seeders](#database-seeders)
 
-## Usage on Laravel 5.5 to 8
+## Versions
 
-### Step 1: Install Through Composer
+Depending on your Laravel version, you should:
+- use [JeffreyWay/Laravel-4-Generators](https://github.com/JeffreyWay/Laravel-4-Generators) for Laravel 4;
+- use [`v1` of this package](https://github.com/laracasts/Laravel-5-Generators-Extended/tree/v1) for Laravel 5.0 - 5.8;
+- use `v2` of this package for Laravel 6-8;
+
+## Installation
+
+You can install v2 of this project using composer, the service provider will be automatically loaded by Laravel itself:
 
 ```
-composer require laracasts/generators --dev
+composer require --dev laracasts/generators
 ```
-
-### Step 2: Run Artisan!
 
 You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
 
-
-## Usage on Laravel 5.4 and 5.3
-
-### Step 1: Install Through Composer
-
-```
-composer require laracasts/generators --dev
-```
-
-### Step 2: Add the Service Provider
-
-You'll only want to use these generators for local development, so you don't want to update the production  `providers` array in `config/app.php`. Instead, add the provider in `app/Providers/AppServiceProvider.php`, like so:
-
-```php
-public function register()
-{
-	if ($this->app->environment() == 'local') {
-		$this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
-	}
-}
-```
-
-
-### Step 3: Run Artisan!
-
-You're all set. Run `php artisan` from the console, and you'll see the new commands in the `make:*` namespace section.
 
 ## Examples
 
 - [Migrations With Schema](#migrations-with-schema)
 - [Pivot Tables](#pivot-tables)
-- [Database Seeders](#database-seeders)
 
 ### Migrations With Schema
 
@@ -197,7 +171,12 @@ This means, if you run, say:
 php artisan make:migration:schema create_dogs_table --schema="name:string"
 ```
 
-You'll get a migration, populated with the schema...but you'll also get an Eloquent model at `app/Dog.php`. Naturally, you can opt out of this by adding the `--model=0` flag/option.
+You'll get a migration, populated with the schema... and if you pass ```--model=true``` you'll also get an Eloquent model at `app/Dog.php`.
+
+If you wish to specify a different path for your migration file, you can use the `--path` option like so:
+```
+php artisan make:migration:schema create_dogs_table --path=\database\migrations\pets
+```
 
 #### Foreign Constraints
 
@@ -276,29 +255,3 @@ class CreatePostTagPivotTable extends Migration {
 ```
 
 > Notice that the naming conventions are being followed here, regardless of what order you pass the table names.
-
-### Database Seeders
-
-```
-php artisan make:seed posts
-```
-
-This one is fairly basic. It just gives you a quick seeder class in the "database/seeds" folder.
-
-```php
-<?php
-
-use Illuminate\Database\Seeder;
-
-// composer require laracasts/testdummy
-use Laracasts\TestDummy\Factory as TestDummy;
-
-class PostsTableSeeder extends Seeder {
-
-	public function run()
-	{
-        // TestDummy::times(20)->create('App\Post');
-	}
-
-}
-```
