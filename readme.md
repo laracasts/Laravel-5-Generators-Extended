@@ -166,17 +166,18 @@ Here's a few other examples of commands that you might write:
 - `php artisan make:migration:schema create_posts_table --schema="title:string, body:text, excerpt:string:nullable"`
 - `php artisan make:migration:schema remove_excerpt_from_posts_table --schema="excerpt:string:nullable"`
 
+#### Models
 
-Now, when you create a migration, you typically want a model to go with it, right? By default, we'll go ahead and create an Eloquent model to go with your migration.
-This means, if you run, say:
+Now, when you create a migration, you typically want a model to go with it, right? By default, this package won't create a model to go with the migration. But it could. Just specify `--model=true` and it will do that for you:
 
 ```
-php artisan make:migration:schema create_dogs_table --schema="name:string"
+php artisan make:migration:schema create_dogs_table --schema="name:string" --model=true
 ```
 
-You'll get a migration, populated with the schema... and if you pass ```--model=true``` you'll also get an Eloquent model at `app/Dog.php`.
+#### Migration Path
 
 If you wish to specify a different path for your migration file, you can use the `--path` option like so:
+
 ```
 php artisan make:migration:schema create_dogs_table --path=\database\migrations\pets
 ```
