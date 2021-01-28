@@ -210,6 +210,15 @@ Schema::create('posts', function(Blueprint $table) {
 );
 ```
 
+You can also manually specify which table and/or key to use as a reference by passing arguments to the `foreign` field like this: `logo_id:integer:foreign(images,key_name)`. You may have a logo image whose path is stored in an `images` table. This will give us:
+
+```
+$table->integer('logo_id');
+$table->foreign('logo_id')->references('key_name')->on('images');
+```
+
+Don't pass the `key_name` to default to the `id` column.
+
 Neato.
 
 ### Pivot Tables

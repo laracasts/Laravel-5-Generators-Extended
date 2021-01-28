@@ -55,4 +55,20 @@ class SchemaParserSpec extends ObjectBehavior
             ['name' => 'user_id', 'type' => 'foreign', 'arguments' => [], 'options' => ['references' => "'id'", 'on' => "'users'"]]
         ]);
     }
+
+    function it_parses_schema_fields_that_want_foreign_constraints_with_table()
+    {
+        $this->parse('logo_id:integer:foreign(images)')->shouldReturn([
+            ['name' => 'logo_id', 'type' => 'integer', 'arguments' => [], 'options' => []],
+            ['name' => 'logo_id', 'type' => 'foreign', 'arguments' => [], 'options' => ['references' => "'id'", 'on' => "'images'"]]
+        ]);
+    }
+
+    function it_parses_schema_fields_that_want_foreign_constraints_with_table_and_primaryKey()
+    {
+        $this->parse('logo_id:integer:foreign(images,images_key)')->shouldReturn([
+            ['name' => 'logo_id', 'type' => 'integer', 'arguments' => [], 'options' => []],
+            ['name' => 'logo_id', 'type' => 'foreign', 'arguments' => [], 'options' => ['references' => "'images_key'", 'on' => "'images'"]]
+        ]);
+    }
 }
