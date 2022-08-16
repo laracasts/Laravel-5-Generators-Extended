@@ -30,4 +30,4 @@ class {{class}} extends Migration
     {
         Schema::dropIfExists('{{pivotTableName}}');
     }
-}
+};
