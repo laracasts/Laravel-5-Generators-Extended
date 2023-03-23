@@ -170,7 +170,7 @@ class PivotMigrationMakeCommand extends GeneratorCommand
      */
     protected function getSortedSingularTableNames()
     {
-        $tables = array_map('Str::singular', $this->getTableNamesFromInput());
+        $tables = array_map(array(Str::class, 'singular'), $this->getTableNamesFromInput());
 
         sort($tables);
 
