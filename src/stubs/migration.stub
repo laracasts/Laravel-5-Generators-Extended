@@ -24,4 +24,4 @@ class {{class}} extends Migration
     {
         {{schema_down}}
     }
-}
+};
