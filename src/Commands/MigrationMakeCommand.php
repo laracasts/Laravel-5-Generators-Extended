@@ -124,10 +124,58 @@ class MigrationMakeCommand extends Command
         $modelPath = $this->getModelPath($this->getModelName());
 
         if ($this->option('model') && !$this->files->exists($modelPath)) {
-            $this->call('make:model', [
-                'name' => $this->getModelName()
-            ]);
+            $this->files->put($modelPath, $this->compileModelStub());
         }
+
+    }
+
+    /**
+     * Compile the model stub.
+     *
+     * @return string
+     */
+    protected function compileModelStub()
+    {
+        $stub = $this->files->get(__DIR__ . '/../stubs/model.stub');
+
+        $this->replaceModelName($stub)
+            ->replaceFillable($stub)
+            ->replaceTableName($stub);
+
+        return $stub;
+    }
+
+    /**
+     * Replace the model name in the stub.
+     *
+     * @param  string $stub
+     * @return $this
+     */
+    protected function replaceModelName(&$stub)
+    {
+        $stub = str_replace('{{name}}', $this->getModelName(), $stub);
+
+        return $this;
+    }
+
+    /**
+     * Replace the model fillable in the stub.
+     *
+     * @param  string $stub
+     * @return $this
+     */
+    protected function replaceFillable(&$stub)
+    {
+        if ($schema = $this->option('schema')) {
+            $schema = (new SchemaParser)->parse($schema);
+        }
+        $padvalue = function($s){ return "'{$s['name']}'"; };
+        $paddedFields = implode(', ', array_map($padvalue, $schema));
+        $paddedFields = "'". substr($paddedFields, 2);
+
+        $stub = str_replace('{{fillable}}', $paddedFields, $stub);
+
+        return $this;
     }
 
     /**
