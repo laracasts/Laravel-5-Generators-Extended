@@ -182,6 +182,42 @@ If you wish to specify a different path for your migration file, you can use the
 php artisan make:migration:schema create_dogs_table --path=\database\migrations\pets
 ```
 
+If you wish to drop a table from the DB you can use the "drop" keyword.
+```php
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class DropOnionsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::drop('onions');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::create('onions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('origin');
+        });
+    }
+}
+```
+Don't forget to submit your columns as well for the down method!
+Also pay attention that if you try to drop a table which has a foreign key attached, your migration will fail at runtime!
+
 #### Foreign Constraints
 
 There's also a secret bit of sugar for when you need to generate foreign constraints. Imagine that you have a posts table, where each post belongs to a user. Let's try:
