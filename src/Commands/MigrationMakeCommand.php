@@ -4,6 +4,7 @@ namespace Laracasts\Generators\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Laracasts\Generators\Migrations\NameParser;
@@ -46,6 +47,7 @@ class MigrationMakeCommand extends Command
      * @var Composer
      */
     private $composer;
+    protected array $rawSchema;
 
     /**
      * Create a new command instance.
@@ -116,17 +118,79 @@ class MigrationMakeCommand extends Command
         $this->line("<info>Created Migration:</info> {$filename}");
     }
 
+
+    protected static function quotedString($value): string {
+        return "'" . $value . "'";
+    }
+
+    /**
+     * Generate a string representing an array of values
+     * (a quick and dirty shorthand `var_dump` without proper escaping)
+     * @param string[] $values
+     * @return string
+     */
+    protected function quotedValues($values): string {
+        $quoted_values = array_map([__CLASS__, 'quotedString'], $values);
+        return '[' . implode(', ', $quoted_values) . ']';
+    }
+
+    /**
+     * Get any obvious model casts (datetime/timestamp fields)
+     * @return string
+     */
+    protected function getCasts(): string {
+        $castFields = array_filter($this->rawSchema, function ($column) {
+            return Str::contains(Str::lower($column['type']), ['datetime', 'timestamp']);
+        });
+
+        if (empty($castFields))
+            return '';
+
+        $casts = "\n    protected \$casts = [";
+        foreach ($castFields as $column) {
+            $column = (object)$column;
+            $casts .= "\n        '$column->name' => 'datetime',\n";
+        }
+        $casts .= "    ];\n";
+
+        return $casts;
+    }
+
     /**
      * Generate an Eloquent model, if the user wishes.
      */
     protected function makeModel()
     {
-        $modelPath = $this->getModelPath($this->getModelName());
+        $modelName = $this->getModelName();
+        $modelPath = $this->getModelPath($modelName);
 
-        if ($this->option('model') && !$this->files->exists($modelPath)) {
-            $this->call('make:model', [
-                'name' => $this->getModelName()
-            ]);
+        if ($this->option('model')) {
+            if (!$this->files->exists($modelPath)) {
+                $this->call('make:model', [
+                    'name' => $modelName
+                ]);
+            }
+
+            // A really nasty hack to populate the fillable model property, will operate on existing models if no
+            // $fillable var is set, though probably not smart enough to properly handle a add_columns_to_table
+            // request
+            if ($this->files->exists($modelPath)) {
+                $columnNames = array_map(function ($column) {
+                    return $column['name'];
+                }, $this->rawSchema);
+
+                if (!empty($columnNames)) {
+                    $fillable = "\n    protected \$fillable = " . $this->quotedValues($columnNames) . ";\n";
+                    $casts = $this->getCasts();
+
+                    /** @noinspection PhpUnhandledExceptionInspection */
+                    $contents = $this->files->get($modelPath);
+                    if (!Str::contains($contents, '$fillable')) {
+                        $contents = Str::replaceLast("}", $fillable . $casts, $contents) . "}\n";
+                        $this->files->put($modelPath, $contents);
+                    }
+                }
+            }
         }
     }
 
@@ -168,7 +232,8 @@ class MigrationMakeCommand extends Command
     {
         $name = str_replace($this->getAppNamespace(), '', $name);
 
-        return $this->laravel['path'] . '/' . str_replace('\\', '/', $name) . '.php';
+        // Not sure why Models/ wasn't already included in the model path
+        return $this->laravel['path'] . '/Models/' . str_replace('\\', '/', $name) . '.php';
     }
 
     /**
@@ -227,6 +292,8 @@ class MigrationMakeCommand extends Command
     {
         if ($schema = $this->option('schema')) {
             $schema = (new SchemaParser)->parse($schema);
+            // Save a copy of the rawSchema to generate Model $fillable/$casts
+            $this->rawSchema = $schema;
         }
 
         $schema = (new SyntaxBuilder)->create($schema, $this->meta);
